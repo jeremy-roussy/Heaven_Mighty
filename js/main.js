@@ -3,8 +3,6 @@ let engine;
 let scene;
 let camera;
 
-let jet;
-
 window.onload = startGame;
 
 function startGame() {
@@ -18,13 +16,13 @@ function startGame() {
     // main animation loop 60 times/s
     scene.toRender = () => {
         let deltaTime = engine.getDeltaTime();
-        //let jet = scene.getMeshByName("jet");
-        if(jet) jet.move();
+        let jet = scene.getMeshByName("jet");
+       jet.move();
 
         scene.render();
     };
 
-    // instead of running the game, we tell instead the asset manager to load.
+          // instead of running the game, we tell instead the asset manager to load.
     // when finished it will execute its onFinish callback that will run the loop
     scene.assetsManager.load();
 }
@@ -54,7 +52,7 @@ function createScene() {
     // This targets the camera to scene origin
     camera.setTarget(BABYLON.Vector3.Zero());
     //camera.rotation.y = 0.3;
-    camera.attachControl(canvas);
+    //camera.attachControl(canvas);
 
     createLights(scene);
 
@@ -90,6 +88,7 @@ function configureAssetManager(scene) {
     };
     
     assetsManager.onFinish = function (tasks) {
+        console.log("##### ON FINISH ######")
         engine.runRenderLoop(function () {
             scene.toRender();
         });
@@ -143,16 +142,21 @@ function createJet(scene) {
 
     meshTask.onSuccess = function (task) {
         console.log("je suis rentré dans createJet");
-        onJetImported(task.meshes, task.particleSystems, task.skeletons);
+        onJetImported(task.loadedMeshes,
+            task.loadedParticleSystems,
+            task.loadedSkeletons);
+    }
+
+    meshTask.onerror = function() {
+        console.log("ERRORRRR");
     }
 
     function onJetImported(meshes, particles, skeletons) {
         console.log("je suis rentré dans onJetImported");
-
-        jet = meshes[0];
-
+        console.log("fin onJetImported");
+        let jet = meshes[0];
+        console.log("fin onJetImported");
         jet.name = "jet";
-        console.log("j'ai donné un nom a jet");
 
         jet.scaling.scaleInPlace(0.1);
         //jet.scaling.scaleInPlace(0.75);
@@ -163,11 +167,12 @@ function createJet(scene) {
         jet.frontVector = new BABYLON.Vector3(0, 0, 1);
 
         jet.move = () => {
-            if (scene.inputStates.up) {
 
+            if (scene.inputStates.up) {
+                jet.position.z += 0.05;
             }
             if (scene.inputStates.down) {
-
+                jet.position.z += 0.05;
             }
             if (scene.inputStates.left) {
 
@@ -176,6 +181,7 @@ function createJet(scene) {
 
             }
         }
+        console.log("fin onJetImported");
     }
 }
 
@@ -207,13 +213,14 @@ function modifySettings() {
     window.addEventListener(
         "keydown",
         (event) => {
-            if (event.key === "KeyQ") {
+            console.log(event.code)
+            if (event.code === "KeyA") {
                 scene.inputStates.left = true;
-            } else if (event.key === "KeyZ") {
+            } else if (event.code === "KeyW") {
                 scene.inputStates.up = true;
-            } else if (event.key === "KeyD") {
+            } else if (event.code === "KeyD") {
                 scene.inputStates.right = true;
-            } else if (event.key === "KeyS") {
+            } else if (event.code === "KeyS") {
                 scene.inputStates.down = true;
             }
         },
@@ -224,13 +231,13 @@ function modifySettings() {
     window.addEventListener(
         "keyup",
         (event) => {
-            if (event.key === "KeyQ") {
+            if (event.code === "KeyA") {
                 scene.inputStates.left = false;
-            } else if (event.key === "KeyZ") {
+            } else if (event.code === "KeyW") {
                 scene.inputStates.up = false;
-            } else if (event.key === "KeyD") {
+            } else if (event.code === "KeyD") {
                 scene.inputStates.right = false;
-            } else if (event.key === "KeyS") {
+            } else if (event.code === "KeyS") {
                 scene.inputStates.down = false;
             }
         },
