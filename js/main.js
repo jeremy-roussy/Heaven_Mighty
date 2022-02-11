@@ -147,7 +147,7 @@ function createJet(scene) {
             task.loadedSkeletons);
     }
 
-    meshTask.onerror = function() {
+    meshTask.onError = function() {
         console.log("ERRORRRR");
     }
 
