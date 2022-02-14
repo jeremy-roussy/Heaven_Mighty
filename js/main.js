@@ -9,20 +9,33 @@ function startGame() {
     console.log("startGame");
     canvas = document.querySelector("#myCanvas");
     engine = new BABYLON.Engine(canvas, true);
+
     scene = createScene();
+
+    const localAxes = new BABYLON.AxesViewer(scene, 10);
 
     modifySettings();
 
     // main animation loop 60 times/s
     scene.toRender = () => {
         let deltaTime = engine.getDeltaTime();
+
         let jet = scene.getMeshByName("jet");
-       jet.move();
+
+        localAxes.xAxis.parent = jet;
+        localAxes.yAxis.parent = jet;
+        localAxes.zAxis.parent = jet;
+
+        // second parameter is the target to follow
+        scene.followCameraJet = createFollowCamera(scene, jet);
+        scene.activeCamera = scene.followCameraJet;
+
+        jet.move();
 
         scene.render();
     };
 
-          // instead of running the game, we tell instead the asset manager to load.
+    // instead of running the game, we tell instead the asset manager to load.
     // when finished it will execute its onFinish callback that will run the loop
     scene.assetsManager.load();
 }
@@ -32,27 +45,17 @@ function createScene() {
 
     scene.assetsManager = configureAssetManager(scene);
 
-    //const localAxes = new BABYLON.AxesViewer(scene, 5);
-
-    /*
     let dome = new BABYLON.PhotoDome(
         "skydome",
         "./environment/sky2.jpg",
         {
-            resolution: 32,
+            resolution: 64,
             size: 10000
         },
         scene
     );
-    */
 
     createJet(scene);
-
-    camera = new BABYLON.FreeCamera("myCamera", new BABYLON.Vector3(0, 5, -10), scene);
-    // This targets the camera to scene origin
-    camera.setTarget(BABYLON.Vector3.Zero());
-    //camera.rotation.y = 0.3;
-    //camera.attachControl(canvas);
 
     createLights(scene);
 
@@ -86,9 +89,8 @@ function configureAssetManager(scene) {
             " items still need to be loaded."
         );
     };
-    
+
     assetsManager.onFinish = function (tasks) {
-        console.log("##### ON FINISH ######")
         engine.runRenderLoop(function () {
             scene.toRender();
         });
@@ -100,7 +102,14 @@ function configureAssetManager(scene) {
 function loadSounds(scene) {
     var assetsManager = scene.assetsManager;
 
-    var binaryTask = assetsManager.addBinaryFileTask("skyCrawlers", "./sounds/friendly-duel.mp3");
+    var binaryTask = assetsManager.addBinaryFileTask("gunSound", "sounds/gunShot.mp3");
+    binaryTask.onSuccess = function (task) {
+        scene.assets.gunSound = new BABYLON.Sound("gun", task.data, scene, null, {
+        loop: false,
+        });
+    };
+
+    binaryTask = assetsManager.addBinaryFileTask("skyCrawlers", "./sounds/friendly-duel.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.skyCrawlersMusic = new BABYLON.Sound(
             "skyCrawlers",
@@ -111,7 +120,7 @@ function loadSounds(scene) {
                 loop: true,
                 autoplay: true,
             }
-        ).setVolume(0.1);
+        ).setVolume(0.25);
     };
 }
 
@@ -121,14 +130,14 @@ function createFollowCamera(scene, target) {
     // use the target name to name the camera
     let camera = new BABYLON.FollowCamera(
         targetName + "FollowCamera",
-        target.position,
+        new BABYLON.Vector3(target.position.x, target.position.y - 3, target.position.z - 10),
         scene,
         target
     );
 
     // default values
-    camera.radius = 40; // how far from the object to follow
-    camera.heightOffset = 14; // how high above the object to place the camera
+    camera.radius = 0; // how far from the object to follow
+    camera.heightOffset = 100; // how high above the object to place the camera
     camera.rotationOffset = 0; // the viewing angle
     camera.cameraAcceleration = 0.1; // how fast to move
     camera.maxCameraSpeed = 5; // speed limit
@@ -138,61 +147,112 @@ function createFollowCamera(scene, target) {
 
 function createJet(scene) {
 
-    var meshTask = scene.assetsManager.addMeshTask("jet task", "", "./models/F22/", "scene.gltf", scene);
+    var meshTask = scene.assetsManager.addMeshTask("jet task", "", "./models/F16/", "scene.gltf", scene);
 
     meshTask.onSuccess = function (task) {
-        console.log("je suis rentré dans createJet");
+
         onJetImported(task.loadedMeshes,
             task.loadedParticleSystems,
             task.loadedSkeletons);
     }
 
-    meshTask.onerror = function() {
+    meshTask.onerror = function () {
         console.log("ERRORRRR");
     }
 
     function onJetImported(meshes, particles, skeletons) {
-        console.log("je suis rentré dans onJetImported");
-        console.log("fin onJetImported");
         let jet = meshes[0];
-        console.log("fin onJetImported");
+
         jet.name = "jet";
 
         jet.scaling.scaleInPlace(0.1);
-        //jet.scaling.scaleInPlace(0.75);
 
         jet.position.y = 0;
-        //jet.rotation = new BABYLON.Vector3(0, -Math.PI/2, 0);
         jet.speed = 1;
         jet.frontVector = new BABYLON.Vector3(0, 0, 1);
+        
+        // to avoid firing too many lasers rapidly
+        jet.canFireLasers = true;
+        jet.fireLasersAfter = 0.1; // in seconds
 
         jet.move = () => {
 
+            jet.rotation = new BABYLON.Vector3(jet.rotation.x, -Math.PI / 2, jet.rotation.z);
+
+            jet.moveWithCollisions(
+                jet.frontVector.multiplyByFloats(jet.speed, jet.speed, jet.speed)
+            );
+
             if (scene.inputStates.up) {
-                jet.position.z += 0.05;
+                jet.rotation.z -= 0.025;
+                jet.frontVector = new BABYLON.Vector3(
+                    0,
+                    Math.sin(jet.rotation.z),
+                    Math.cos(jet.rotation.z)
+                );
             }
             if (scene.inputStates.down) {
-                jet.position.z += 0.05;
+                jet.rotation.z += 0.025;
+                jet.frontVector = new BABYLON.Vector3(
+                    0,
+                    Math.sin(jet.rotation.z),
+                    Math.cos(jet.rotation.z)
+                );
             }
             if (scene.inputStates.left) {
-
+                jet.rotation.x += 0.05;
             }
             if (scene.inputStates.right) {
+                jet.rotation.x -= 0.05;
+            }
+            if(scene.inputStates.space) {
+                if (jet.canFireLasers) {
+                    // ok, we fire, let's put the above property to false
+                    jet.canFireLasers = false;
 
+                    // let's be able to fire again after a while
+                    setTimeout(() => {
+                        jet.canFireLasers = true;
+                    }, 1000 * jet.fireLasersAfter);
+
+                    scene.assets.gunSound.setPosition(jet.position);
+                    scene.assets.gunSound.setVolume(0.1);
+                    scene.assets.gunSound.play();
+
+                    // create a ray
+                    let origin = jet.position; // position of the jet
+
+                    let direction = new BABYLON.Vector3(
+                        jet.frontVector.x,
+                        jet.frontVector.y,
+                        jet.frontVector.z
+                    );
+
+                    let length = 1000;
+                    let ray = new BABYLON.Ray(origin, direction, length);
+
+                    // to make the ray visible :
+                    let rayHelper = new BABYLON.RayHelper(ray);
+                    rayHelper.show(scene, new BABYLON.Color3.Red());
+
+                    // to make ray disappear after 50ms
+                    setTimeout(() => {
+                        rayHelper.hide(ray);
+                    }, 50);
+                }
             }
         }
-        console.log("fin onJetImported");
     }
 }
 
 function createLights(scene) {
     // i.e sun light with all light rays parallels, the vector is the direction.
     let light0 = new BABYLON.DirectionalLight(
-      "dir0",
-      new BABYLON.Vector3(-1, -1, 0),
-      scene
+        "dir0",
+        new BABYLON.Vector3(-1, -1, 0),
+        scene
     );
-  }
+}
 
 window.addEventListener("resize", () => {
     engine.resize()
@@ -207,13 +267,11 @@ function modifySettings() {
     scene.inputStates.up = false;
     scene.inputStates.down = false;
     scene.inputStates.space = false;
-    scene.inputStates.laser = false;
 
     //add the listener to the main, window object, and update the states
     window.addEventListener(
         "keydown",
         (event) => {
-            console.log(event.code)
             if (event.code === "KeyA") {
                 scene.inputStates.left = true;
             } else if (event.code === "KeyW") {
@@ -222,6 +280,8 @@ function modifySettings() {
                 scene.inputStates.right = true;
             } else if (event.code === "KeyS") {
                 scene.inputStates.down = true;
+            } else if(event.code === "Space") {
+                scene.inputStates.space = true;
             }
         },
         false
@@ -239,6 +299,8 @@ function modifySettings() {
                 scene.inputStates.right = false;
             } else if (event.code === "KeyS") {
                 scene.inputStates.down = false;
+            } else if(event.code === "Space") {
+                scene.inputStates.space = false;
             }
         },
         false
