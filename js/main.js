@@ -227,7 +227,7 @@ function createJet(scene) {
                 } else {
                     jet.fireMode = "bullet";
                 }
-                
+
                 setTimeout(() => {
                     jet.canFireLasers = true;
                 }, 1000 * jet.fireLasersAfter);
