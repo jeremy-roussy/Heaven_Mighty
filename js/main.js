@@ -54,6 +54,10 @@ function createScene() {
         },
         scene
     );
+    
+    // const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map2.jpg", {width:10000, height:10000, subdivisions: 250, minHeight:0, maxHeight: 2500});
+    // const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map4.png", {width:10000, height:10000, subdivisions: 1000, minHeight:0, maxHeight: 3000});
+    // const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map3.png", {width:10000, height:10000, subdivisions: 750, minHeight:0, maxHeight: 3000});
 
     createJet(scene);
 
@@ -102,9 +106,16 @@ function configureAssetManager(scene) {
 function loadSounds(scene) {
     var assetsManager = scene.assetsManager;
 
-    var binaryTask = assetsManager.addBinaryFileTask("gunSound", "sounds/gunShot.mp3");
+    var binaryTask = assetsManager.addBinaryFileTask("gunSound", "sounds/bullet.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.gunSound = new BABYLON.Sound("gun", task.data, scene, null, {
+        loop: false,
+        });
+    };
+
+    binaryTask = assetsManager.addBinaryFileTask("rocketSound", "sounds/rocket.mp3");
+    binaryTask.onSuccess = function (task) {
+        scene.assets.rocketSound = new BABYLON.Sound("rocket", task.data, scene, null, {
         loop: false,
         });
     };
@@ -167,13 +178,18 @@ function createJet(scene) {
 
         jet.scaling.scaleInPlace(0.1);
 
-        jet.position.y = 0;
-        jet.speed = 1;
+        jet.position.y = 2000;
+        jet.speed = 2.5;
         jet.frontVector = new BABYLON.Vector3(0, 0, 1);
+        jet.fireMode = "bullet";
         
         // to avoid firing too many lasers rapidly
         jet.canFireLasers = true;
-        jet.fireLasersAfter = 0.1; // in seconds
+        jet.fireLasersAfter = 0.075; // in seconds
+
+        // to avoid firing too many rockets rapidly
+        jet.canFireRockets = true;
+        jet.fireRocketsAfter = 2; // in seconds
 
         jet.move = () => {
 
@@ -205,40 +221,88 @@ function createJet(scene) {
             if (scene.inputStates.right) {
                 jet.rotation.x -= 0.05;
             }
+            if (scene.inputStates.shift) {
+                if (jet.fireMode === "bullet") {
+                    jet.fireMode = "rocket";
+                } else {
+                    jet.fireMode = "bullet";
+                }
+                
+                setTimeout(() => {
+                    jet.canFireLasers = true;
+                }, 1000 * jet.fireLasersAfter);
+            }
             if(scene.inputStates.space) {
-                if (jet.canFireLasers) {
-                    // ok, we fire, let's put the above property to false
-                    jet.canFireLasers = false;
+                if (jet.fireMode === "bullet") {
+                    if (jet.canFireLasers) {
+                        // ok, we fire, let's put the above property to false
+                        jet.canFireLasers = false;
 
-                    // let's be able to fire again after a while
-                    setTimeout(() => {
-                        jet.canFireLasers = true;
-                    }, 1000 * jet.fireLasersAfter);
+                        // let's be able to fire again after a while
+                        setTimeout(() => {
+                            jet.canFireLasers = true;
+                        }, 1000 * jet.fireLasersAfter);
 
-                    scene.assets.gunSound.setPosition(jet.position);
-                    scene.assets.gunSound.setVolume(0.1);
-                    scene.assets.gunSound.play();
+                        scene.assets.gunSound.setPosition(jet.position);
+                        scene.assets.gunSound.setVolume(0.25);
+                        scene.assets.gunSound.play();
 
-                    // create a ray
-                    let origin = jet.position; // position of the jet
+                        // create a ray
+                        let origin = jet.position; // position of the jet
 
-                    let direction = new BABYLON.Vector3(
-                        jet.frontVector.x,
-                        jet.frontVector.y,
-                        jet.frontVector.z
-                    );
+                        let direction = new BABYLON.Vector3(
+                            jet.frontVector.x,
+                            jet.frontVector.y,
+                            jet.frontVector.z
+                        );
 
-                    let length = 1000;
-                    let ray = new BABYLON.Ray(origin, direction, length);
+                        let length = 1000;
+                        let ray = new BABYLON.Ray(origin, direction, length);
 
-                    // to make the ray visible :
-                    let rayHelper = new BABYLON.RayHelper(ray);
-                    rayHelper.show(scene, new BABYLON.Color3.Red());
+                        // to make the ray visible :
+                        let rayHelper = new BABYLON.RayHelper(ray);
+                        rayHelper.show(scene, new BABYLON.Color3.Red());
 
-                    // to make ray disappear after 50ms
-                    setTimeout(() => {
-                        rayHelper.hide(ray);
-                    }, 50);
+                        // to make ray disappear after 50ms
+                        setTimeout(() => {
+                            rayHelper.hide(ray);
+                        }, 50);
+                    }
+                } else if (jet.fireMode === "rocket") {
+                    if (jet.canFireRockets) {
+                        // ok, we fire, let's put the above property to false
+                        jet.canFireRockets = false;
+
+                        // let's be able to fire again after a while
+                        setTimeout(() => {
+                            jet.canFireRockets = true;
+                        }, 1000 * jet.fireRocketsAfter);
+
+                        scene.assets.rocketSound.setPosition(jet.position);
+                        scene.assets.rocketSound.setVolume(0.25);
+                        scene.assets.rocketSound.play();
+
+                        // create a ray
+                        let origin = jet.position; // position of the jet
+
+                        let direction = new BABYLON.Vector3(
+                            jet.frontVector.x,
+                            jet.frontVector.y,
+                            jet.frontVector.z
+                        );
+
+                        let length = 1000;
+                        let ray = new BABYLON.Ray(origin, direction, length);
+
+                        // to make the ray visible :
+                        let rayHelper = new BABYLON.RayHelper(ray);
+                        rayHelper.show(scene, new BABYLON.Color3.Red());
+
+                        // to make ray disappear after 50ms
+                        setTimeout(() => {
+                            rayHelper.hide(ray);
+                        }, 50);
+                    }
                 }
             }
         }
@@ -267,6 +331,7 @@ function modifySettings() {
     scene.inputStates.up = false;
     scene.inputStates.down = false;
     scene.inputStates.space = false;
+    scene.inputStates.shift = false;
 
     //add the listener to the main, window object, and update the states
     window.addEventListener(
@@ -282,6 +347,8 @@ function modifySettings() {
                 scene.inputStates.down = true;
             } else if(event.code === "Space") {
                 scene.inputStates.space = true;
+            } else if (event.code === "ShiftLeft") {
+                scene.inputStates.shift = true;
             }
         },
         false
@@ -301,6 +368,8 @@ function modifySettings() {
                 scene.inputStates.down = false;
             } else if(event.code === "Space") {
                 scene.inputStates.space = false;
+            } else if (event.code === "ShiftLeft") {
+                scene.inputStates.shift = false;
             }
         },
         false
