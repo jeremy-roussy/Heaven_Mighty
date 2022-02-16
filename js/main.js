@@ -12,8 +12,6 @@ function startGame() {
 
     scene = createScene();
 
-    const localAxes = new BABYLON.AxesViewer(scene, 10);
-
     modifySettings();
 
     // main animation loop 60 times/s
@@ -21,10 +19,6 @@ function startGame() {
         let deltaTime = engine.getDeltaTime();
 
         let jet = scene.getMeshByName("jet");
-
-        localAxes.xAxis.parent = jet;
-        localAxes.yAxis.parent = jet;
-        localAxes.zAxis.parent = jet;
 
         // second parameter is the target to follow
         scene.followCameraJet = createFollowCamera(scene, jet);
@@ -55,7 +49,7 @@ function createScene() {
         scene
     );
     
-    // const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map2.jpg", {width:10000, height:10000, subdivisions: 250, minHeight:0, maxHeight: 2500});
+    const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map2.jpg", {width:10000, height:10000, subdivisions: 250, minHeight:0, maxHeight: 2500});
     // const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map4.png", {width:10000, height:10000, subdivisions: 1000, minHeight:0, maxHeight: 3000});
     // const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map3.png", {width:10000, height:10000, subdivisions: 750, minHeight:0, maxHeight: 3000});
 
@@ -141,14 +135,14 @@ function createFollowCamera(scene, target) {
     // use the target name to name the camera
     let camera = new BABYLON.FollowCamera(
         targetName + "FollowCamera",
-        new BABYLON.Vector3(target.position.x, target.position.y - 3, target.position.z - 10),
+        new BABYLON.Vector3(target.position.x + 10, target.position.y, target.position.z),
         scene,
         target
     );
 
     // default values
     camera.radius = 0; // how far from the object to follow
-    camera.heightOffset = 100; // how high above the object to place the camera
+    camera.heightOffset = 25; // how high above the object to place the camera
     camera.rotationOffset = 0; // the viewing angle
     camera.cameraAcceleration = 0.1; // how fast to move
     camera.maxCameraSpeed = 5; // speed limit
@@ -176,12 +170,16 @@ function createJet(scene) {
 
         jet.name = "jet";
 
-        jet.scaling.scaleInPlace(0.1);
-
+        jet.scaling.scaleInPlace(0.1);        
+        
         jet.position.y = 2000;
-        jet.speed = 2.5;
-        jet.frontVector = new BABYLON.Vector3(0, 0, 1);
+        jet.speed = 5;
         jet.fireMode = "bullet";
+
+        const localAxes = new BABYLON.AxesViewer(scene, 0.01);
+        localAxes.xAxis.parent = jet;
+        localAxes.yAxis.parent = jet;
+        localAxes.zAxis.parent = jet;
         
         // to avoid firing too many lasers rapidly
         jet.canFireLasers = true;
@@ -193,44 +191,45 @@ function createJet(scene) {
 
         jet.move = () => {
 
-            jet.rotation = new BABYLON.Vector3(jet.rotation.x, -Math.PI / 2, jet.rotation.z);
+            let radian = Math.PI / 180;
+            jet.frontVector = localAxes.xAxis.forward;
 
             jet.moveWithCollisions(
                 jet.frontVector.multiplyByFloats(jet.speed, jet.speed, jet.speed)
             );
 
             if (scene.inputStates.up) {
-                jet.rotation.z -= 0.025;
-                jet.frontVector = new BABYLON.Vector3(
-                    0,
-                    Math.sin(jet.rotation.z),
-                    Math.cos(jet.rotation.z)
-                );
+                jet.rotation.z -= radian;
+                jet.rotate(BABYLON.Axis.Z, -radian, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.down) {
-                jet.rotation.z += 0.025;
-                jet.frontVector = new BABYLON.Vector3(
-                    0,
-                    Math.sin(jet.rotation.z),
-                    Math.cos(jet.rotation.z)
-                );
+                jet.rotation.z += radian;
+                jet.rotate(BABYLON.Axis.Z, radian, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.left) {
-                jet.rotation.x += 0.05;
+                jet.rotation.x += radian;
+                jet.rotate(BABYLON.Axis.X, radian, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.right) {
-                jet.rotation.x -= 0.05;
+                jet.rotation.x -= radian;
+                jet.rotate(BABYLON.Axis.X, -radian, BABYLON.Space.LOCAL);
             }
+            if (scene.inputStates.strafeL) {
+                jet.rotation.y -= radian;
+                jet.rotate(BABYLON.Axis.Y, -radian, BABYLON.Space.LOCAL);
+            }
+            if (scene.inputStates.strafeR) {
+                jet.rotation.y += radian;
+                jet.rotate(BABYLON.Axis.Y, radian, BABYLON.Space.LOCAL);
+            }
+
+
             if (scene.inputStates.shift) {
                 if (jet.fireMode === "bullet") {
                     jet.fireMode = "rocket";
                 } else {
                     jet.fireMode = "bullet";
                 }
-
-                setTimeout(() => {
-                    jet.canFireLasers = true;
-                }, 1000 * jet.fireLasersAfter);
             }
             if(scene.inputStates.space) {
                 if (jet.fireMode === "bullet") {
@@ -328,6 +327,8 @@ function modifySettings() {
     scene.inputStates = {};
     scene.inputStates.left = false;
     scene.inputStates.right = false;
+    scene.inputStates.strafeL = false;
+    scene.inputStates.strafeR = false;
     scene.inputStates.up = false;
     scene.inputStates.down = false;
     scene.inputStates.space = false;
@@ -345,6 +346,10 @@ function modifySettings() {
                 scene.inputStates.right = true;
             } else if (event.code === "KeyS") {
                 scene.inputStates.down = true;
+            } else if (event.code === "KeyQ") {
+                scene.inputStates.strafeL = true;
+            } else if (event.code === "KeyE") {
+                scene.inputStates.strafeR = true;
             } else if(event.code === "Space") {
                 scene.inputStates.space = true;
             } else if (event.code === "ShiftLeft") {
@@ -366,6 +371,10 @@ function modifySettings() {
                 scene.inputStates.right = false;
             } else if (event.code === "KeyS") {
                 scene.inputStates.down = false;
+            } else if (event.code === "KeyQ") {
+                scene.inputStates.strafeL = false;
+            } else if (event.code === "KeyE") {
+                scene.inputStates.strafeR = false;
             } else if(event.code === "Space") {
                 scene.inputStates.space = false;
             } else if (event.code === "ShiftLeft") {
