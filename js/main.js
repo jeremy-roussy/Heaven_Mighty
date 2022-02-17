@@ -188,10 +188,12 @@ function createJet(scene) {
         jet.fireMode = "bullet";
         
         // to avoid firing too many lasers rapidly
-        jet.canFireLasers = true;
-        jet.fireLasersAfter = 0.05; // in seconds
+        jet.gunAmmunition = 2400;
+        jet.canFire = true;
+        jet.fireAfter = 0.01; // in seconds
 
         // to avoid firing too many rockets rapidly
+        jet.rocketAmmunition = 2;
         jet.canFireRockets = true;
         jet.fireRocketsAfter = 2; // in seconds
 
@@ -200,9 +202,11 @@ function createJet(scene) {
             let radian = Math.PI / 180;
             jet.frontVector = localAxes.xAxis.forward;
 
+            /*
             jet.moveWithCollisions(
                 jet.frontVector.multiplyByFloats(jet.speed, jet.speed, jet.speed)
             );
+            */
 
             if (scene.inputStates.up) {
                 jet.rotate(BABYLON.Axis.Z, -radian, BABYLON.Space.LOCAL);
@@ -233,14 +237,16 @@ function createJet(scene) {
             }
             if(scene.inputStates.space) {
                 if (jet.fireMode === "bullet") {
-                    if (jet.canFireLasers) {
+                    if (jet.canFire && jet.gunAmmunition > 0) {
                         // ok, we fire, let's put the above property to false
-                        jet.canFireLasers = false;
+                        jet.canFire = false;
+                        jet.gunAmmunition--;
+                        document.getElementById("GUN-value").innerText = jet.gunAmmunition;
 
                         // let's be able to fire again after a while
                         setTimeout(() => {
-                            jet.canFireLasers = true;
-                        }, 1000 * jet.fireLasersAfter);
+                            jet.canFire = true;
+                        }, 1000 * jet.fireAfter);
 
                         scene.assets.gunSound.setPosition(jet.position);
                         scene.assets.gunSound.setVolume(0.25);
@@ -266,11 +272,19 @@ function createJet(scene) {
                         setTimeout(() => {
                             rayHelper.hide(ray);
                         }, 50);
+                    } else if(jet.gunAmmunition === 0){
+                        document.getElementById("GUN-label").style.color = "#f00";
+                        document.getElementById("GUN-label").style.textShadow = "0px 0px 1px #f00";
+                        document.getElementById("GUN-value").style.color = "#f00";
+                        document.getElementById("GUN-value").style.textShadow = "0px 0px 1px #f00";
+                        document.getElementById("GUN-value").innerText = "---";
                     }
                 } else if (jet.fireMode === "rocket") {
-                    if (jet.canFireRockets) {
+                    if (jet.canFireRockets && jet.rocketAmmunition > 0) {
                         // ok, we fire, let's put the above property to false
                         jet.canFireRockets = false;
+                        jet.rocketAmmunition--;
+                        document.getElementById("MSL-value").innerText = jet.rocketAmmunition;
 
                         // let's be able to fire again after a while
                         setTimeout(() => {
@@ -301,6 +315,12 @@ function createJet(scene) {
                         setTimeout(() => {
                             rayHelper.hide(ray);
                         }, 50);
+                    } else if(jet.rocketAmmunition === 0){
+                        document.getElementById("MSL-label").style.color = "#f00";
+                        document.getElementById("MSL-label").style.textShadow = "0px 0px 1px #f00";
+                        document.getElementById("MSL-value").style.color = "#f00";
+                        document.getElementById("MSL-label").style.textShadow = "0px 0px 1px #f00";
+                        document.getElementById("MSL-value").innerText = "---";
                     }
                 }
             }

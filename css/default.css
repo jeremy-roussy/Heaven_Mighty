@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+@font-face {
+    font-family: Orbitron, sans-serif;
+}
+
 html, body {
     padding:0px;
     margin:0px;
@@ -7,51 +12,9 @@ html, body {
     background-color: transparent;  
 }
 
-.lifebar {
-    width: 240px;
-    height: 36px;
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    padding: 0;
-    transform: skewX(-30deg) rotateX(50deg);
-}
-.lifebar .background-life {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    min-width: 100%;
-    transition: min-width 0.4s ease;
-    z-index: -1;
-    background-color: #ff3cac;
-    background-image: linear-gradient(225deg, #ff3cac 0%, #784ba0 50%, #2b86c5 100%);
-}
-.lifebar .background-life:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: -2;
-    filter: blur(10px);
-    background-color: #ff3cac;
-    background-image: linear-gradient(225deg, #ff3cac 0%, #784ba0 50%, #2b86c5 100%);
-}
-.lifebar .bar {
+p {
     margin: 0;
-    width: 52.5px;
-    float: left;
-    height: 24px;
-    border: 3px solid #000;
-    border-width: 6px 3px;
-}
-.lifebar .bar:first-of-type {
-    border-width: 6px 3px 6px 6px;
-}
-.lifebar .bar:nth-of-type(4) {
-    border-width: 6px 6px 6px 3px;
+    padding: 0;
 }
 
 #myCanvas {
@@ -61,9 +24,29 @@ html, body {
 
 .hud{
     position:absolute;
-    text-shadow:0px 0px 1px #0f0;
     width:100%;
     height:100%;
+}
+
+.informations {
+    position: absolute;
+    color: #0f0;
+    text-shadow:0px 0px 1px #0f0;
+    right: 10px;
+    bottom: 25%;
+    width: 150px;
+    font-family: Orbitron;
+}
+
+.label {
+    float: left;
+    width: 50%;
+}
+
+.value {
+    float: right;
+    width: 50%;
+    text-align: right;
 }
 
 .radar {
