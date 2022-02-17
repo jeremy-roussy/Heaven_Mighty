@@ -4,6 +4,54 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    background-color: transparent;  
+}
+
+.lifebar {
+    width: 240px;
+    height: 36px;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    padding: 0;
+    transform: skewX(-30deg) rotateX(50deg);
+}
+.lifebar .background-life {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    min-width: 100%;
+    transition: min-width 0.4s ease;
+    z-index: -1;
+    background-color: #ff3cac;
+    background-image: linear-gradient(225deg, #ff3cac 0%, #784ba0 50%, #2b86c5 100%);
+}
+.lifebar .background-life:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -2;
+    filter: blur(10px);
+    background-color: #ff3cac;
+    background-image: linear-gradient(225deg, #ff3cac 0%, #784ba0 50%, #2b86c5 100%);
+}
+.lifebar .bar {
+    margin: 0;
+    width: 52.5px;
+    float: left;
+    height: 24px;
+    border: 3px solid #000;
+    border-width: 6px 3px;
+}
+.lifebar .bar:first-of-type {
+    border-width: 6px 3px 6px 6px;
+}
+.lifebar .bar:nth-of-type(4) {
+    border-width: 6px 6px 6px 3px;
 }
 
 #myCanvas {
@@ -11,3 +59,98 @@ html, body {
     height:100%;
 }
 
+.hud{
+    position:absolute;
+    text-shadow:0px 0px 1px #0f0;
+    width:100%;
+    height:100%;
+}
+
+.radar {
+    position: absolute;
+    left: 25px;
+    bottom: 25px;
+    background: -webkit-radial-gradient(center, rgba(32, 255, 77, 0.3) 0%, rgba(32, 255, 77, 0) 75%), -webkit-repeating-radial-gradient(rgba(32, 255, 77, 0) 5.8%, rgba(32, 255, 77, 0) 18%, rgba(32, 255, 77, 1) 18.6%, rgba(32, 255, 77, 0) 18.9%), -webkit-linear-gradient(90deg, rgba(32, 255, 77, 0) 49.5%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 0) 50.2%), -webkit-linear-gradient(0deg, rgba(32, 255, 77, 0) 49.5%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 0) 50.2%);
+    background: radial-gradient(center, rgba(32, 255, 77, 0.3) 0%, rgba(32, 255, 77, 0) 75%), repeating-radial-gradient(rgba(32, 255, 77, 0) 5.8%, rgba(32, 255, 77, 0) 18%, rgba(32, 255, 77, 1) 18.6%, rgba(32, 255, 77, 0) 18.9%), linear-gradient(90deg, rgba(32, 255, 77, 0) 49.5%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 0) 50.2%), linear-gradient(0deg, rgba(32, 255, 77, 0) 49.5%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 0) 50.2%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 0.2rem solid #20ff4d;
+    overflow: hidden;
+}
+
+.radar:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    animation: blips 5s infinite;
+    animation-timing-function: linear;
+    animation-delay: 1.4s;
+}
+
+.radar:after {
+    content: ' ';
+    display: block;
+    background-image: linear-gradient(44deg, rgba(0, 255, 51, 0) 50%, rgba(0, 255, 51, 1) 100%);
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: radar-beam 5s infinite;
+    animation-timing-function: linear;
+    transform-origin: bottom right;
+    border-radius: 100% 0 0 0;
+}
+
+.radar-background {
+    background-image: linear-gradient(0deg, transparent 24%, rgba(32, 255, 77, 0.15) 25%, rgba(32, 255, 77, 0.15) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, 0.15) 75%, rgba(32, 255, 77, 0.15) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(32, 255, 77, 0.15) 25%, rgba(32, 255, 77, 0.15) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, 0.15) 75%, rgba(32, 255, 77, 0.15) 76%, transparent 77%, transparent);
+    background-size: 7rem 7rem;
+    background-position: -5.2rem -5.2rem;
+    background-color: rgba(127, 127, 127, 0.25);
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+.hologram-rocket1 {
+    position: absolute;
+    right: 140px;
+    bottom: 40px;
+    display: block;
+    width: 10px;
+    height: auto;
+}
+
+.hologram-rocket2 {
+    position: absolute;
+    right: 25px;
+    bottom: 40px;
+    display: block;
+    width: 10px;
+    height: auto;
+}
+
+.hologram-jet {
+    position: absolute;
+    right: 50px;
+    bottom: 25px;
+    display: block;
+    width: 75px;
+    height: auto;
+}
+
+@keyframes radar-beam {
+    0% {
+        transform: rotate(0deg);
+   }
+    100% {
+        transform: rotate(360deg);
+   }
+}

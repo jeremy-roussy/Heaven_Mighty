@@ -57,6 +57,8 @@ function createScene() {
 
     createLights(scene);
 
+    createGUI(scene);
+
     loadSounds(scene);
 
     return scene;
@@ -145,9 +147,13 @@ function createFollowCamera(scene, target) {
     camera.heightOffset = 25; // how high above the object to place the camera
     camera.rotationOffset = 0; // the viewing angle
     camera.cameraAcceleration = 0.1; // how fast to move
-    camera.maxCameraSpeed = 5; // speed limit
+    camera.maxCameraSpeed = 10; // speed limit
 
     return camera;
+}
+
+function createGUI(scene) {
+    
 }
 
 function createJet(scene) {
@@ -168,22 +174,22 @@ function createJet(scene) {
     function onJetImported(meshes, particles, skeletons) {
         let jet = meshes[0];
 
+        const localAxes = new BABYLON.AxesViewer(scene, 0.01);
+        localAxes.xAxis.parent = jet;
+        localAxes.yAxis.parent = jet;
+        localAxes.zAxis.parent = jet;
+
         jet.name = "jet";
 
         jet.scaling.scaleInPlace(0.1);        
         
         jet.position.y = 2000;
-        jet.speed = 5;
+        jet.speed = 10;
         jet.fireMode = "bullet";
-
-        const localAxes = new BABYLON.AxesViewer(scene, 0.01);
-        localAxes.xAxis.parent = jet;
-        localAxes.yAxis.parent = jet;
-        localAxes.zAxis.parent = jet;
         
         // to avoid firing too many lasers rapidly
         jet.canFireLasers = true;
-        jet.fireLasersAfter = 0.075; // in seconds
+        jet.fireLasersAfter = 0.05; // in seconds
 
         // to avoid firing too many rockets rapidly
         jet.canFireRockets = true;
@@ -199,28 +205,22 @@ function createJet(scene) {
             );
 
             if (scene.inputStates.up) {
-                jet.rotation.z -= radian;
                 jet.rotate(BABYLON.Axis.Z, -radian, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.down) {
-                jet.rotation.z += radian;
                 jet.rotate(BABYLON.Axis.Z, radian, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.left) {
-                jet.rotation.x += radian;
-                jet.rotate(BABYLON.Axis.X, radian, BABYLON.Space.LOCAL);
+                jet.rotate(BABYLON.Axis.X, radian * 7.5, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.right) {
-                jet.rotation.x -= radian;
-                jet.rotate(BABYLON.Axis.X, -radian, BABYLON.Space.LOCAL);
+                jet.rotate(BABYLON.Axis.X, -radian * 7.5, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.strafeL) {
-                jet.rotation.y -= radian;
-                jet.rotate(BABYLON.Axis.Y, -radian, BABYLON.Space.LOCAL);
+                jet.rotate(BABYLON.Axis.Y, -radian * 5 / 100, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.strafeR) {
-                jet.rotation.y += radian;
-                jet.rotate(BABYLON.Axis.Y, radian, BABYLON.Space.LOCAL);
+                jet.rotate(BABYLON.Axis.Y, radian * 5 / 100, BABYLON.Space.LOCAL);
             }
 
 

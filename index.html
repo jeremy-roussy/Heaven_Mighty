@@ -5,10 +5,27 @@
     <meta charset="UTF-8">
         <link rel="stylesheet" href="css/default.css">
         <script src="lib/babylon.max.js"></script>
-        <script src="lib/babylonjs.loaders.min.js"></script>
+        <script src="lib/babylon.loaders.min.js"></script>
         <script type="module" src="js/main.js"></script>
     </head>
     <body>
+
+        
+        <div class="hud">
+          <div class="radar"><div class="radar-background"></div></div>
+          <img class="hologram-rocket1" src="./models/F16/AIM-9.png">
+          <img class="hologram-jet" src="./models/F16/F16_blueprint3.png">
+          <img class="hologram-rocket2" src="./models/F16/AIM-9.png">
+        </div>
+          
+        <div class="lifebar">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="background-life"></div>
+        </div>
+        
         <canvas id="myCanvas" width=1600 height=1200></canvas>
     </body>
 </html>
