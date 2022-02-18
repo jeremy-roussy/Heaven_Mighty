@@ -31,6 +31,7 @@ Dans les prochaines versions j'ai pour objectif :
 - implémenter la gestion de la vitesse
 - implémenter des graphismes plus réalistes pour le tire avec les rockets et les balles
 - implémenter le déclenchement des alertes sonnores
+- implémenter une vue dans le cockpit
 
 ## Language utilisés
 
