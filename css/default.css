@@ -1,6 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&family=Orbitron&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
 @font-face {
     font-family: Orbitron, sans-serif;
+    font-family: Inconsolata, monospace;
+}
+
+@keyframes blink {
+	0% { opacity: 1; }
+	20% { opacity: .8; }
+	30% { opacity: .6; }
+	40% { opacity: .4; }
+	50% { opacity: .2; }
+	60% { opacity: 0; }
+	70% { opacity: .2; }
+	80% { opacity: .4; }
+	90% { opacity: .6; }
+	98% { opacity: .8; }
+	100% { opacity: 1; }
 }
 
 html, body {
@@ -24,8 +41,33 @@ p {
 
 .hud{
     position:absolute;
+    display: flex;
+    justify-content: center;
     width:100%;
     height:100%;
+}
+
+#alert {
+    position: absolute;
+    align-self: center;
+    justify-content: center;
+    top: 30%;
+    font-family: Inconsolata;
+    font-weight: bolder;
+    outline: 1px solid red;;
+    color: red;
+    text-align: center;
+    width: 150px;
+    animation: blink 750ms linear infinite;
+}
+
+#selector {
+    position: absolute;
+    color: #0f0;
+    text-shadow:0px 0px 1px #0f0;
+    right: 175px;
+    bottom: 260px;
+    font-family: Orbitron;
 }
 
 .informations {
@@ -33,7 +75,7 @@ p {
     color: #0f0;
     text-shadow:0px 0px 1px #0f0;
     right: 10px;
-    bottom: 25%;
+    bottom: 200px;
     width: 150px;
     font-family: Orbitron;
 }
