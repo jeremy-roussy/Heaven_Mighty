@@ -23,10 +23,10 @@ export function createJet(scene) {
 
         jet.name = "jet";
 
-        jet.scaling.scaleInPlace(0.1);        
+        jet.scaling.scaleInPlace(0.5);        
         
         jet.position.y = 2500;
-        jet.speed = 10;
+        jet.speed = 0;
         jet.fireMode = "bullet";
 
         jet.alert = "";

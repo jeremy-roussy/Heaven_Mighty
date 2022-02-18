@@ -156,7 +156,7 @@ function loadSounds(scene) {
                 loop: true,
                 autoplay: true,
             }
-        ).setVolume(0.25);
+        ).setVolume(0); // set to 0.25 if you want to play
     };
 }
 
