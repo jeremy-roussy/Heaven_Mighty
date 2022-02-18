@@ -1,17 +1,43 @@
 ﻿# SkyCrawlers
 
-## Introduction
-
-## Language utilisés
-
-HTML5 / CSS3
-Javascript (Babylon.js)
-
 ## Auteur
 
 Roussy Jeremy
 
+## Commande
+
+- Z, S : faire une rotation en roulis
+
+  ![mouvement de roulis](https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Aileron_roll.gif/270px-Aileron_roll.gif)
+  
+- Q, D : faire une rotation en tangage
+  
+  ![mouvement de tangage](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Aileron_pitch.gif/270px-Aileron_pitch.gif)
+  
+- A, E : faire une rotation en lacet
+  
+  ![mouvement de lacet](https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Aileron_yaw.gif/270px-Aileron_yaw.gif)
+  
+- ESPACE : tirer
+- MAJ : changer de mode de tir
+- F : activer les leurres
+
+## Résumé
+
+Dans la version actuelle le joueur controle un avion de chasse de type F16 avec lequel il peut manoeuvrer comme bon lui semble sur une carte avec un relief assez dense. De plus grace à une interface, le joueur peut voir à tout moment le reste de munitions transporté par son avion, ainsi que son état général. Une fonction d'alerte sonnore est implémentée mais n'est pour le moment pas utilisée.
+
+Dans les prochaines versions j'ai pour objectif :
+- implémenter des collisions, afin que lorsque l'avion touche le sol, il explose
+- implémenter la gestion de la vitesse
+- implémenter des graphismes plus réalistes pour le tire avec les rockets et les balles
+- implémenter le déclenchement des alertes sonnores
+
+## Language utilisés
+
+- HTML5 / CSS3
+- Javascript (Babylon.js)
+
 ## Sources des objets utilisés :
 
-https://sketchfab.com/3d-models/f-16-falcon-b04a44ae7e804129ae5f0eb95f9cdf83
-https://sketchfab.com/3d-models/f-16-b61ad1fce1934784b2338d740ea282d9
+- [F16](https://sketchfab.com/3d-models/f-16-b61ad1fce1934784b2338d740ea282d9)
+
