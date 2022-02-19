@@ -1,3 +1,5 @@
+import { createBullet } from './bullet.js';
+
 export function createJet(scene) {
 
     var meshTask = scene.assetsManager.addMeshTask("jet task", "", "./models/F16/", "scene.gltf", scene);
@@ -23,10 +25,10 @@ export function createJet(scene) {
 
         jet.name = "jet";
 
-        jet.scaling.scaleInPlace(0.5);        
+        jet.scaling.scaleInPlace(1);        
         
         jet.position.y = 2500;
-        jet.speed = 0;
+        jet.speed = 10;
         jet.fireMode = "bullet";
 
         jet.alert = "";
@@ -127,6 +129,8 @@ export function createJet(scene) {
                         jet.gunAmmunition--;
                         document.getElementById("GUN-value").innerText = jet.gunAmmunition;
 
+                        createBullet(scene, jet);
+
                         // let's be able to fire again after a while
                         setTimeout(() => {
                             jet.canFire = true;
@@ -135,27 +139,6 @@ export function createJet(scene) {
                         scene.assets.gunSound.setPosition(jet.position);
                         scene.assets.gunSound.setVolume(0.25);
                         scene.assets.gunSound.play();
-
-                        // create a ray
-                        let origin = jet.position; // position of the jet
-
-                        let direction = new BABYLON.Vector3(
-                            jet.frontVector.x,
-                            jet.frontVector.y,
-                            jet.frontVector.z
-                        );
-
-                        let length = 1000;
-                        let ray = new BABYLON.Ray(origin, direction, length);
-
-                        // to make the ray visible :
-                        let rayHelper = new BABYLON.RayHelper(ray);
-                        rayHelper.show(scene, new BABYLON.Color3.Red());
-
-                        // to make ray disappear after 50ms
-                        setTimeout(() => {
-                            rayHelper.hide(ray);
-                        }, 50);
                     } else if(jet.gunAmmunition === 0){
                         changeStatus("GUN");
                     }

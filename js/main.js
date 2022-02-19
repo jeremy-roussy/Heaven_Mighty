@@ -14,6 +14,8 @@ function startGame() {
 
     scene = createScene();
 
+    scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.AmmoJSPlugin());
+
     modifySettings();
 
     // main animation loop 60 times/s
@@ -21,6 +23,8 @@ function startGame() {
         let deltaTime = engine.getDeltaTime();
 
         let jet = scene.getMeshByName("jet");
+
+        //let freeCamera = createFreeCamera(scene);
 
         // second parameter is the target to follow
         scene.followCameraJet = createFollowCamera(scene, jet);
@@ -166,7 +170,7 @@ function createFollowCamera(scene, target) {
     // use the target name to name the camera
     let camera = new BABYLON.FollowCamera(
         targetName + "FollowCamera",
-        new BABYLON.Vector3(target.position.x + 10, target.position.y, target.position.z),
+        new BABYLON.Vector3(target.position.x + 25, target.position.y, target.position.z),
         scene,
         target
     );
@@ -180,6 +184,17 @@ function createFollowCamera(scene, target) {
 
     return camera;
 }
+
+function createFreeCamera(scene) {
+    // Parameters : name, position, scene
+    var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-3.7, 2500.8, 0), scene);
+
+    // Targets the camera to a particular position. In this case the scene origin
+    camera.setTarget( new BABYLON.Vector3(-50, 2500, 0));
+
+    // Attach the camera to the canvas
+    camera.attachControl(canvas, true);
+  }
 
 function createLights(scene) {
     // i.e sun light with all light rays parallels, the vector is the direction.
