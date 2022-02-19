@@ -32,6 +32,8 @@ Dans les prochaines versions j'ai pour objectif :
 - implémenter des graphismes plus réalistes pour le tire avec les rockets et les balles
 - implémenter le déclenchement des alertes sonnores
 - implémenter une vue dans le cockpit
+- ajouter des animations pour les ailerons et les gouvernes
+- ajouter un mode multijoueurs
 
 ## Language utilisés
 
