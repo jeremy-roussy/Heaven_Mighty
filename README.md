@@ -28,8 +28,7 @@ Dans la version actuelle le joueur controle un avion de chasse de type F16 avec 
 
 Dans les prochaines versions j'ai pour objectif :
 - implémenter des collisions, afin que lorsque l'avion touche le sol, il explose
-- implémenter la gestion de la vitesse
-- implémenter des graphismes plus réalistes pour le tire avec les rockets et les balles
+- implémenter des graphismes plus réalistes pour le tire avec les rockets
 - implémenter le déclenchement des alertes sonnores
 - implémenter une vue dans le cockpit
 - ajouter des animations pour les ailerons et les gouvernes
