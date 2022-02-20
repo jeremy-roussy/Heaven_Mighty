@@ -6,6 +6,8 @@ export function createBullet(scene, jet) {
         scene
     );
 
+    bullet.material = new BABYLON.StandardMaterial("yellow", scene);
+    bullet.material.emissiveColor = new BABYLON.Color3(0.8,0.8,0.4);
     
     // position the bullet
     let pos = jet.position;
@@ -24,7 +26,7 @@ export function createBullet(scene, jet) {
 
     // the bullet needs to be fired, so we need an impulse !
     // we apply it to the center of the sphere
-    let powerOfFire = 100;
+    let powerOfFire = 250;
     let aimForceVector = new BABYLON.Vector3(
         jet.frontVector.x * powerOfFire,
         jet.frontVector.y * powerOfFire,
@@ -34,4 +36,9 @@ export function createBullet(scene, jet) {
     bullet.physicsImpostor.applyImpulse(aimForceVector, bullet.getAbsolutePosition());
 
     bullet.actionManager = new BABYLON.ActionManager(scene);
+
+    // Make the cannonball disappear after 3s
+    setTimeout(() => {
+        bullet.dispose();
+      }, 500);
 }

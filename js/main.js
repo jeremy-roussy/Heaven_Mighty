@@ -10,7 +10,7 @@ window.onload = startGame;
 function startGame() {
     console.log("startGame");
     canvas = document.querySelector("#myCanvas");
-    engine = new BABYLON.Engine(canvas, true);
+    engine = new BABYLON.Engine(canvas, true, { stencil: true });
 
     scene = createScene();
 
@@ -32,6 +32,7 @@ function startGame() {
 
         jet.move();
         jet.messageAlert();
+        jet.crash();
 
         scene.render();
     };
@@ -55,10 +56,8 @@ function createScene() {
         },
         scene
     );
-    
-    const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map2.jpg", {width:10000, height:10000, subdivisions: 250, minHeight:0, maxHeight: 2500});
-    //const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map4.png", {width:10000, height:10000, subdivisions: 1000, minHeight:0, maxHeight: 3000});
-    // const largeGround = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map3.png", {width:10000, height:10000, subdivisions: 750, minHeight:0, maxHeight: 3000});
+
+    let ground = createGround(scene);
 
     createJet(scene);
 
@@ -104,48 +103,88 @@ function configureAssetManager(scene) {
     return assetsManager;
 }
 
+function createGround(scene) {
+    const groundOptions = {
+        width: 10000,
+        height:10000,
+        subdivisions: 250,
+        minHeight: 0,
+        maxHeight: 2500,
+        onReady: onGroundCreated,
+    };
+
+    //scene is optional and defaults to the current scene
+    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap(
+        "ground",
+        "./environment/map2.jpg",
+        groundOptions,
+        scene
+    );
+
+    //const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map4.png", {width:10000, height:10000, subdivisions: 1000, minHeight:0, maxHeight: 3000});
+    // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map3.png", {width:10000, height:10000, subdivisions: 750, minHeight:0, maxHeight: 3000});
+
+    function onGroundCreated() {
+        const groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
+        groundMaterial.diffuseTexture = new BABYLON.Texture("./environment/rock3.jpg");
+        ground.material = groundMaterial;
+
+        // to be taken into account by collision detection
+        ground.checkCollisions = true;
+
+        // for physic engine
+        ground.physicsImpostor = new BABYLON.PhysicsImpostor(
+            ground,
+            BABYLON.PhysicsImpostor.HeightmapImpostor,
+            { mass: 0 },
+            scene
+        );
+    }
+    return ground;
+}
+
 function loadSounds(scene) {
     var assetsManager = scene.assetsManager;
 
     var binaryTask = assetsManager.addBinaryFileTask("gunSound", "sounds/bullet.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.gunSound = new BABYLON.Sound("gun", task.data, scene, null, {
-        loop: false,
+            loop: false,
         });
     };
 
     binaryTask = assetsManager.addBinaryFileTask("rocketSound", "sounds/rocket.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.rocketSound = new BABYLON.Sound("rocket", task.data, scene, null, {
-        loop: false,
+            loop: false,
         });
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("flareSound", "sounds/flare.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("flareSound", "sounds/multipleFlare.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.flareSound = new BABYLON.Sound("flare", task.data, scene, null, {
-        loop: false,
+            loop: false,
         });
     };
 
     binaryTask = assetsManager.addBinaryFileTask("missileAlertSound", "sounds/missile-alert.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.missileAlertSound = new BABYLON.Sound("missileAlert", task.data, scene, null, {
-        loop: false,
+            loop: false,
         });
     };
 
     binaryTask = assetsManager.addBinaryFileTask("pullUpAlertSound", "sounds/VWS/pull-up.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.pullUpAlertSound = new BABYLON.Sound("pullUpAlert", task.data, scene, null, {
-        loop: false,
+            loop: false,
         });
     };
 
     binaryTask = assetsManager.addBinaryFileTask("chaffsFlareAlertSound", "sounds/VWS/chaffs-flare.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.chaffsFlareAlertSound = new BABYLON.Sound("chaffsFlareAlert", task.data, scene, null, {
-        loop: false,
+            loop: false,
         });
     };
 
@@ -160,7 +199,7 @@ function loadSounds(scene) {
                 loop: true,
                 autoplay: true,
             }
-        ).setVolume(0); // set to 0.25 if you want to play
+        ).setVolume(0.25); // set to 0.25 if you want to play
     };
 }
 
@@ -180,21 +219,10 @@ function createFollowCamera(scene, target) {
     camera.heightOffset = 25; // how high above the object to place the camera
     camera.rotationOffset = 0; // the viewing angle
     camera.cameraAcceleration = 0.1; // how fast to move
-    camera.maxCameraSpeed = 10; // speed limit
+    camera.maxCameraSpeed = 20; // speed limit
 
     return camera;
 }
-
-function createFreeCamera(scene) {
-    // Parameters : name, position, scene
-    var camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(-3.7, 2500.8, 0), scene);
-
-    // Targets the camera to a particular position. In this case the scene origin
-    camera.setTarget( new BABYLON.Vector3(-50, 2500, 0));
-
-    // Attach the camera to the canvas
-    camera.attachControl(canvas, true);
-  }
 
 function createLights(scene) {
     // i.e sun light with all light rays parallels, the vector is the direction.
@@ -222,6 +250,8 @@ function modifySettings() {
     scene.inputStates.f = false;
     scene.inputStates.space = false;
     scene.inputStates.shift = false;
+    scene.inputStates.arrowUp = false;
+    scene.inputStates.arrowDown = false;
 
     //add the listener to the main, window object, and update the states
     window.addEventListener(
@@ -241,10 +271,14 @@ function modifySettings() {
                 scene.inputStates.strafeR = true;
             } else if (event.code === "KeyF") {
                 scene.inputStates.f = true;
-            } else if(event.code === "Space") {
+            } else if (event.code === "Space") {
                 scene.inputStates.space = true;
             } else if (event.code === "ShiftLeft") {
                 scene.inputStates.shift = true;
+            } else if (event.code === "ArrowUp") {
+                scene.inputStates.arrowUp = true;
+            } else if (event.code === "ArrowDown") {
+                scene.inputStates.arrowDown = true;
             }
         },
         false
@@ -268,10 +302,14 @@ function modifySettings() {
                 scene.inputStates.strafeR = false;
             } else if (event.code === "KeyF") {
                 scene.inputStates.f = false;
-            } else if(event.code === "Space") {
+            } else if (event.code === "Space") {
                 scene.inputStates.space = false;
             } else if (event.code === "ShiftLeft") {
                 scene.inputStates.shift = false;
+            } else if (event.code === "ArrowUp") {
+                scene.inputStates.arrowUp = false;
+            } else if (event.code === "ArrowDown") {
+                scene.inputStates.arrowDown = false;
             }
         },
         false

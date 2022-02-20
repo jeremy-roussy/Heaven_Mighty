@@ -24,9 +24,8 @@ export function createJet(scene) {
         localAxes.zAxis.parent = jet;
 
         jet.name = "jet";
+        jet.scaling.scaleInPlace(1);
 
-        jet.scaling.scaleInPlace(1);        
-        
         jet.position.y = 2500;
         jet.speed = 10;
         jet.fireMode = "bullet";
@@ -37,7 +36,7 @@ export function createJet(scene) {
         // to avoid change mode too rapidly
         jet.canChangeMode = true;
         jet.changeModeAfter = 0.5; // in seconds
-        
+
         // to avoid firing too many lasers rapidly
         jet.gunAmmunition = 2400;
         jet.canFire = true;
@@ -80,6 +79,14 @@ export function createJet(scene) {
             if (scene.inputStates.strafeR) {
                 jet.rotate(BABYLON.Axis.Y, radian * 5 / 100, BABYLON.Space.LOCAL);
             }
+            if (scene.inputStates.arrowUp) {
+                jet.speed += 0.1;
+                if (jet.speed > 20) jet.speed = 20;
+            }
+            if (scene.inputStates.arrowDown) {
+                jet.speed -= 0.1;
+                if (jet.speed < 1) jet.speed = 1;
+            }
             if (scene.inputStates.f) {
                 if (jet.canFireFlares && jet.flareAmmunition > 0) {
                     // ok, we fire, let's put the above property to false
@@ -95,12 +102,12 @@ export function createJet(scene) {
                     scene.assets.chaffsFlareAlertSound.setPosition(jet.position);
                     scene.assets.chaffsFlareAlertSound.setVolume(0.25);
                     scene.assets.chaffsFlareAlertSound.play();
-                    
+
                     scene.assets.flareSound.setPosition(jet.position);
-                    scene.assets.flareSound.setVolume(0.1);
+                    scene.assets.flareSound.setVolume(0.5);
                     scene.assets.flareSound.play();
-                    
-                } else if(jet.flareAmmunition === 0){
+
+                } else if (jet.flareAmmunition === 0) {
                     changeStatus("FLR");
                 }
             }
@@ -121,7 +128,7 @@ export function createJet(scene) {
                     }, 1000 * jet.changeModeAfter);
                 }
             }
-            if(scene.inputStates.space) {
+            if (scene.inputStates.space) {
                 if (jet.fireMode === "bullet") {
                     if (jet.canFire && jet.gunAmmunition > 0) {
                         // ok, we fire, let's put the above property to false
@@ -139,7 +146,7 @@ export function createJet(scene) {
                         scene.assets.gunSound.setPosition(jet.position);
                         scene.assets.gunSound.setVolume(0.25);
                         scene.assets.gunSound.play();
-                    } else if(jet.gunAmmunition === 0){
+                    } else if (jet.gunAmmunition === 0) {
                         changeStatus("GUN");
                     }
                 } else if (jet.fireMode === "rocket") {
@@ -178,7 +185,7 @@ export function createJet(scene) {
                         setTimeout(() => {
                             rayHelper.hide(ray);
                         }, 50);
-                    } else if(jet.rocketAmmunition === 0){
+                    } else if (jet.rocketAmmunition === 0) {
                         changeStatus("MSL");
                     }
                 }
@@ -186,13 +193,13 @@ export function createJet(scene) {
         }
 
         jet.messageAlert = () => {
-            if(jet.alert != "") {
+            if (jet.alert != "") {
                 let element = document.getElementById("alert");
 
                 element.innerText = jet.alert;
                 element.style.display = "block";
 
-                if(jet.alert === "MISSILE ALERT") {
+                if (jet.alert === "MISSILE ALERT") {
                     if (jet.canPlayAlert) {
                         // ok, we fire, let's put the above property to false
                         jet.canPlayAlert = false;
@@ -206,7 +213,7 @@ export function createJet(scene) {
                         }, 1825);
                     }
                 }
-                if(jet.alert === "PULL UP") {
+                if (jet.alert === "PULL UP") {
                     if (jet.canPlayAlert) {
                         // ok, we fire, let's put the above property to false
                         jet.canPlayAlert = false;
@@ -222,6 +229,23 @@ export function createJet(scene) {
                 }
             } else {
                 document.getElementById("alert").style.display = "none";
+            }
+        }
+
+        jet.crash = () => {
+            // create a ray that starts from the jet, and goes down vertically
+            let direction = new BABYLON.Vector3(0, -1, 0);
+            let raytoGround = new BABYLON.Ray(jet.position, direction, 10000);
+
+            // compute intersection point with the ground
+            let pickInfo = scene.pickWithRay(raytoGround, (mesh) => { return (mesh.name === "ground"); });
+            let groundHeight = pickInfo.pickedPoint.y + 2.5;
+
+            console.log("ground : " + groundHeight);
+            console.log("jet : " + jet.position.y)
+
+            if (jet.position.y < groundHeight) {
+                jet.dispose();
             }
         }
     }
