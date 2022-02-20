@@ -31,8 +31,8 @@ function startGame() {
         scene.activeCamera = scene.followCameraJet;
 
         jet.move();
+        jet.verifyAltitude();
         jet.messageAlert();
-        jet.crash();
 
         scene.render();
     };
@@ -47,17 +47,8 @@ function createScene() {
 
     scene.assetsManager = configureAssetManager(scene);
 
-    let dome = new BABYLON.PhotoDome(
-        "skydome",
-        "./environment/sky2.jpg",
-        {
-            resolution: 64,
-            size: 10000
-        },
-        scene
-    );
-
-    let ground = createGround(scene);
+    createGround(scene);
+    createSky(scene);
 
     createJet(scene);
 
@@ -103,10 +94,22 @@ function configureAssetManager(scene) {
     return assetsManager;
 }
 
+function createSky(scene) {
+    let dome = new BABYLON.PhotoDome(
+        "skydome",
+        "./environment/sky2.jpg",
+        {
+            resolution: 64,
+            size: 10000
+        },
+        scene
+    );
+}
+
 function createGround(scene) {
     const groundOptions = {
         width: 10000,
-        height:10000,
+        height: 10000,
         subdivisions: 250,
         minHeight: 0,
         maxHeight: 2500,
@@ -200,6 +203,17 @@ function loadSounds(scene) {
                 autoplay: true,
             }
         ).setVolume(0.25); // set to 0.25 if you want to play
+    };
+
+    binaryTask = assetsManager.addBinaryFileTask("explosion", "sounds/explosion.mp3");
+    binaryTask.onSuccess = function (task) {
+        scene.assets.explosion = new BABYLON.Sound(
+            "explosion",
+            task.data,
+            scene,
+            null,
+            { loop: false, spatialSound: true }
+        );
     };
 }
 

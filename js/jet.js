@@ -192,6 +192,36 @@ export function createJet(scene) {
             }
         }
 
+        jet.verifyAltitude = () => {
+            // create a ray that starts from the jet, and goes down vertically
+            let rayRadarD = new BABYLON.Ray(jet.position, new BABYLON.Vector3(0, -1, 0), 10000);
+            // create a ray that starts from the jet, and goes forward vertically
+            let rayRadarF = new BABYLON.Ray(jet.position, jet.frontVector, 10000);
+            
+            let groundHeight = 0;
+            let groundDistance = 10000;
+
+            let distanceAlert = 50 * jet.speed;
+        
+            try {
+                let pickInfo = scene.pickWithRay(rayRadarD, (mesh) => { return (mesh.name === "ground"); });
+                groundHeight = pickInfo.pickedPoint.y + 2.5;
+            } catch (error) {}
+        
+            try {
+                let pickInfo = scene.pickWithRay(rayRadarF, (mesh) => { return (mesh.name === "ground"); });
+                groundDistance = BABYLON.Vector3.Distance(jet.position, pickInfo.pickedPoint);
+            } catch (error) {}
+        
+            if (jet.position.y < groundHeight) {
+                jet.crash();
+            } else if ((jet.position.y - groundHeight < distanceAlert && groundDistance < distanceAlert) || groundDistance < distanceAlert)  {
+                jet.alert = "PULL UP";
+            } else {
+                jet.alert = "";
+            }
+        }
+
         jet.messageAlert = () => {
             if (jet.alert != "") {
                 let element = document.getElementById("alert");
@@ -233,20 +263,10 @@ export function createJet(scene) {
         }
 
         jet.crash = () => {
-            // create a ray that starts from the jet, and goes down vertically
-            let direction = new BABYLON.Vector3(0, -1, 0);
-            let raytoGround = new BABYLON.Ray(jet.position, direction, 10000);
+            scene.assets.explosion.setPosition(jet.position);
+            scene.assets.explosion.play();
 
-            // compute intersection point with the ground
-            let pickInfo = scene.pickWithRay(raytoGround, (mesh) => { return (mesh.name === "ground"); });
-            let groundHeight = pickInfo.pickedPoint.y + 2.5;
-
-            console.log("ground : " + groundHeight);
-            console.log("jet : " + jet.position.y)
-
-            if (jet.position.y < groundHeight) {
-                jet.dispose();
-            }
+            jet.dispose();
         }
     }
 }
