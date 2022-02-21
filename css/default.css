@@ -190,25 +190,6 @@ p {
     width: 260px;
 }
 
-#arrow {
-    position: absolute;
-    bottom: 0%;
-    right: 0%;
-    transform: translate(0%, 0%);
-    transform: rotate(90deg); 
-    text-align: center;
-    width: 260px;
-}
-
-@keyframes radar-beam {
-    0% {
-        transform: rotate(0deg);
-   }
-    100% {
-        transform: rotate(360deg);
-   }
-}
-
 #counter {
     position: absolute;
     bottom: 145px;
@@ -232,4 +213,55 @@ p {
     border-color: white;
     border-right-style: solid;
     background-color: #232323;
+}
+
+#arrow {
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    transform: translate(0%, 0%);
+    transform: rotate(90deg); 
+    text-align: center;
+    width: 260px;
+}
+
+#artificial-horizon {
+    position: absolute;
+    text-align: center;
+    bottom: 190px;
+    right: 190px;
+    background-color: #232323;
+    width: 125px;
+    height: 125px;
+    border-radius: 125px;
+    border: 5px solid #232323;
+    overflow: hidden;
+}
+
+#gauge {
+    position: relative;
+    background: rgb(255,255,255);
+    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(199,199,199,1) 0%, rgba(98,98,98,1) 100%);
+    width: 125px;
+    height: 65px;
+    border-color: white;
+    border-width: 2.5px;
+    border-bottom-style:solid;
+    transform: rotate(0deg);
+    transform-origin: 49% 100%;
+}
+
+#artificial-horizon img {
+    transform: translateY(-72.5%);
+    width: 100px;
+    height: auto;
+}
+
+@keyframes radar-beam {
+    0% {
+        transform: rotate(0deg);
+   }
+    100% {
+        transform: rotate(360deg);
+   }
 }

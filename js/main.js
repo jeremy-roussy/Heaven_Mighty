@@ -24,11 +24,12 @@ function startGame() {
 
         let jet = scene.getMeshByName("jet");
 
-        //let freeCamera = createFreeCamera(scene);
-
         // second parameter is the target to follow
         scene.followCameraJet = createFollowCamera(scene, jet);
         scene.activeCamera = scene.followCameraJet;
+
+        //update position of camera
+        //scene.activeCamera.position = jet.position.TransformCoordinates(jet.frontVector, )
 
         jet.move();
         jet.verifyAltitude();
@@ -124,7 +125,7 @@ function createGround(scene) {
         scene
     );
 
-    //const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map4.png", {width:10000, height:10000, subdivisions: 1000, minHeight:0, maxHeight: 3000});
+    // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map4.png", {width:10000, height:10000, subdivisions: 1000, minHeight:0, maxHeight: 3000});
     // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map3.png", {width:10000, height:10000, subdivisions: 750, minHeight:0, maxHeight: 3000});
 
     function onGroundCreated() {
@@ -234,6 +235,7 @@ function createFollowCamera(scene, target) {
     camera.rotationOffset = 0; // the viewing angle
     camera.cameraAcceleration = 0.1; // how fast to move
     camera.maxCameraSpeed = 20; // speed limit
+    camera.noRotationConstraint = false;
 
     return camera;
 }

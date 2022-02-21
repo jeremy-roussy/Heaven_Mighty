@@ -283,7 +283,6 @@ export function createJet(scene) {
 
 function displayOnAltimeter(jet) {
     let digit = jet.position.y.toString().split("");
-    console.log(digit);
 
     if(jet.position.y < 1000) {
         document.getElementById("thousand").innerText = 0;
