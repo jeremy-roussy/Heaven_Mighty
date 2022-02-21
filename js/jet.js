@@ -80,11 +80,11 @@ export function createJet(scene) {
                 jet.rotate(BABYLON.Axis.Y, radian * 5 / 100, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.arrowUp) {
-                jet.speed += 0.1;
+                jet.speed += 0.25;
                 if (jet.speed > 20) jet.speed = 20;
             }
             if (scene.inputStates.arrowDown) {
-                jet.speed -= 0.1;
+                jet.speed -= 0.25;
                 if (jet.speed < 1) jet.speed = 1;
             }
             if (scene.inputStates.f) {
@@ -109,6 +109,7 @@ export function createJet(scene) {
 
                 } else if (jet.flareAmmunition === 0) {
                     changeStatus("FLR");
+                    document.getElementById("FLR-value").innerText = "---";
                 }
             }
             if (scene.inputStates.shift) {
@@ -117,10 +118,10 @@ export function createJet(scene) {
 
                     if (jet.fireMode === "bullet") {
                         jet.fireMode = "rocket";
-                        document.getElementById("selector").style.bottom = "240px";
+                        document.getElementById("selector").style.top = "170px";
                     } else {
                         jet.fireMode = "bullet";
-                        document.getElementById("selector").style.bottom = "260px";
+                        document.getElementById("selector").style.top = "150px";
                     }
 
                     setTimeout(() => {
@@ -148,6 +149,7 @@ export function createJet(scene) {
                         scene.assets.gunSound.play();
                     } else if (jet.gunAmmunition === 0) {
                         changeStatus("GUN");
+                        document.getElementById("GUN-value").innerText = "---";
                     }
                 } else if (jet.fireMode === "rocket") {
                     if (jet.canFireRockets && jet.rocketAmmunition > 0) {
@@ -187,12 +189,15 @@ export function createJet(scene) {
                         }, 50);
                     } else if (jet.rocketAmmunition === 0) {
                         changeStatus("MSL");
+                        document.getElementById("MSL-value").innerText = "---";
                     }
                 }
             }
         }
 
         jet.verifyAltitude = () => {
+            displayOnAltimeter(jet);
+
             // create a ray that starts from the jet, and goes down vertically
             let rayRadarD = new BABYLON.Ray(jet.position, new BABYLON.Vector3(0, -1, 0), 10000);
             // create a ray that starts from the jet, and goes forward vertically
@@ -263,12 +268,47 @@ export function createJet(scene) {
         }
 
         jet.crash = () => {
+            changeStatus("DMG");
+            document.getElementById("DMG-value").innerText = "100%";
+
+            document.getElementById("hologram-jet").src = "./models/F16/F16_hologram_red.png";
+
             scene.assets.explosion.setPosition(jet.position);
             scene.assets.explosion.play();
 
             jet.dispose();
         }
     }
+}
+
+function displayOnAltimeter(jet) {
+    let digit = jet.position.y.toString().split("");
+    console.log(digit);
+
+    if(jet.position.y < 1000) {
+        document.getElementById("thousand").innerText = 0;
+        document.getElementById("hundred").innerText = digit[0];
+        document.getElementById("ten").innerText = digit[1];
+        document.getElementById("unit").innerText = digit[2];
+    } else if (jet.position.y < 100) {
+        document.getElementById("thousand").innerText = 0;
+        document.getElementById("hundred").innerText = 0;
+        document.getElementById("ten").innerText = digit[0];
+        document.getElementById("unit").innerText = digit[1];
+    } else if (jet.position.y < 10) {
+        document.getElementById("thousand").innerText = 0;
+        document.getElementById("hundred").innerText = 0;
+        document.getElementById("ten").innerText = 0;
+        document.getElementById("unit").innerText = digit[0];
+    } else {
+        document.getElementById("thousand").innerText = digit[0];
+        document.getElementById("hundred").innerText = digit[1];
+        document.getElementById("ten").innerText = digit[2];
+        document.getElementById("unit").innerText = digit[3];
+    }
+
+    // rotate arrow in function of altitude
+    document.getElementById("arrow").style.transform = "rotate(" + (90 + (jet.position.y / 10000) * 360) + "deg)";
 }
 
 function changeStatus(id) {
@@ -279,5 +319,4 @@ function changeStatus(id) {
     document.getElementById(label).style.textShadow = "0px 0px 1px #f00";
     document.getElementById(value).style.color = "#f00";
     document.getElementById(value).style.textShadow = "0px 0px 1px #f00";
-    document.getElementById(value).innerText = "---";
 }
