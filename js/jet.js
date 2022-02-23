@@ -80,12 +80,10 @@ export function createJet(scene) {
                 jet.rotate(BABYLON.Axis.Y, radian * 5 / 100, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.arrowUp) {
-                jet.speed += 0.25;
-                if (jet.speed > 20) jet.speed = 20;
+                if (jet.speed < 20) jet.speed += 0.25;
             }
             if (scene.inputStates.arrowDown) {
-                jet.speed -= 0.25;
-                if (jet.speed < 1) jet.speed = 1;
+                if (jet.speed > 0) jet.speed -= 0.25;
             }
             if (scene.inputStates.f) {
                 if (jet.canFireFlares && jet.flareAmmunition > 0) {
@@ -305,9 +303,6 @@ function displayOnAltimeter(jet) {
         document.getElementById("ten").innerText = digit[2];
         document.getElementById("unit").innerText = digit[3];
     }
-
-    // rotate arrow in function of altitude
-    document.getElementById("arrow").style.transform = "rotate(" + (90 + (jet.position.y / 10000) * 360) + "deg)";
 }
 
 function changeStatus(id) {

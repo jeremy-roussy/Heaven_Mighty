@@ -26,7 +26,7 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: transparent;  
+    background-color: transparent;
 }
 
 p {
@@ -240,21 +240,29 @@ p {
 
 #gauge {
     position: relative;
+    width: 100%;
+    height: 100%;
+    transform: rotate(0deg);
+}
+
+#gauge #up{
+    position: relative;
+    width: 100%;
+    height: 50%;
+
     background: rgb(255,255,255);
     background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(199,199,199,1) 0%, rgba(98,98,98,1) 100%);
-    width: 125px;
-    height: 65px;
     border-color: white;
     border-width: 2.5px;
     border-bottom-style:solid;
-    transform: rotate(0deg);
-    transform-origin: 49% 100%;
 }
 
-#artificial-horizon img {
-    transform: translateY(-72.5%);
-    width: 100px;
+#artificial-horizon img {    
+    position: absolute;
+    width: 112.5px;
     height: auto;
+    top: 20%;
+    right: 5%;
 }
 
 @keyframes radar-beam {
@@ -264,4 +272,225 @@ p {
     100% {
         transform: rotate(360deg);
    }
+}
+
+/************************************************/
+/************************************************/
+/************************************************/
+
+#wallpaper {
+    min-height: 100%;
+    min-width: 1024px;
+    width: 100%;
+    height: 100%;
+}
+
+#menu {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-rows: 35% auto 35%;
+    grid-template-columns: 5% 90% 5%;
+    grid-template-areas: ". . ." ". content ." ". . .";
+}
+
+#buttons {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+button {
+    background-color: transparent;
+    border: white;
+    position: relative;
+    padding: 0.5em 0.75em;
+    width: 200px;
+    font-family: Orbitron;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in;
+    --webkit-font-smoothing: antialiased;
+    will-change: transform;
+}
+
+button:after, button:before {
+    content: '';
+    display: block;
+    width: 20px;
+    border: 1px solid black;
+    position: absolute;
+    bottom: -2px;
+    top: -2px;
+    transition: width 0.15s ease-in-out;
+}
+
+button:before {
+    border-right: none;
+    left: -2px;
+}
+
+button:after {
+    border-left: none;
+    right: -2px;
+}
+
+button:hover {
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+}
+
+button:hover:before, button:hover:after {
+    width: calc(50% + 2px);
+}
+
+button:focus {
+    outline: none;
+}
+
+button:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease-out;
+}
+
+#controls-screen {
+    grid-area: content;
+    background-color: rgba(23, 23, 23, 0.85);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.keyboard {
+    text-align: center;
+    font-size: 14px;
+    font-family: sans-serif;
+}
+
+.keyboard__row {
+    display: inline-block;
+    height: 3em;
+    margin: 0.2em;
+}
+
+.keyboard__row--h1 {
+    height: 1.7em;
+    line-height: 1.4em;
+}
+
+.keyboard__row--h3 {
+    height: 3.3em;
+}
+
+.keyboard__row > * {
+    position: relative;
+    background: #333;
+    text-align: center;
+    color: #eee;
+    float: left;
+    border-radius: 0.3em;
+    margin: 0.2em;
+    padding: 0.2em;
+    width: 3.3em;
+    height: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    -webkit-user-select: none;
+    border: 1px solid #444;
+    box-shadow: 0 0.2em 0 0.05em #222;
+    border-bottom-color: #555;
+}
+
+.keyboard__row--h1 > div {
+    width: 3.5em;
+}
+
+.keyboard__row > div[data-pressed],
+.keyboard__row > div:active {
+    background: #2a2a2a;
+    color: #aaa;
+    position: relative;
+    top: 0.2em;
+    box-shadow: 0 0 0 0.05em black;
+}
+
+.key--w3 {
+    width: 4.6em;
+}
+
+.key--w4 {
+    width: 6em;
+}
+
+.key--w5 {
+    width: 6.5em;
+}
+
+.key--w6 {
+    width: 8.3em;
+}
+
+.key--space {
+    width: 18em;
+}
+
+.key--double > * {
+    padding-top: 0.1em;
+}
+
+.key--letter {
+    line-height: 2.8em;
+}
+
+.key--bottom-left > * {
+    position: absolute;
+    text-align: left;
+    bottom: 0.4em;
+    left: 0.4em;
+}
+
+.key--bottom-right > * {
+    position: absolute;
+    text-align: right;
+    bottom: 0.4em;
+    right: 0.4em;
+}
+
+.key--fn > * {
+    font-size: 0.6em;
+    line-height: 1em;
+    padding-top: 1.2em;
+    padding-right: 0.2em;
+    text-align: right;
+    float: right;
+}
+
+.key--word > * {
+    font-size: 0.8em;
+}
+
+.key--arrow--tall > *,
+.key--arrow > * {
+    font-size: 0.5em;
+    line-height: 3em;
+}
+
+.key--arrow {
+    height: 1.8em;
+    margin-top: 1.7em;
+    line-height: 0.5em;
+}
+
+.key--arrow--tall > * {
+    padding-top: 0.2em;
+}
+
+.keyboard > .keyboard__row {
+    text-align: center;
 }

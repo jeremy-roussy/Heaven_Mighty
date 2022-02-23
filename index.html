@@ -1,55 +1,62 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-    <title>SkyCrawlers</title>
-    <meta charset="UTF-8">
-        <link rel="stylesheet" href="css/default.css">
-        <script src="lib/babylon.max.js"></script>
-        <script src="lib/babylon.loaders.min.js"></script>
-        <script src="lib/ammo.js"></script>
-        <script type="module" src="js/main.js"></script>
-    </head>
-    <body>        
-        <div class="hud">
-          <p id="alert"></p>
-          <span id="selector">> </span>
-          <div class="informations">
-            <div class="label">
-              <p id="GUN-label">GUN</p>
-              <p id="MSL-label">MSL</p>
-              <p id="FLR-label">FLR</p>
-              <p id="DMG-label">DMG</p>
-            </div>
-            <div class="value">
-              <p id="GUN-value">2400</p>
-              <p id="MSL-value">2</p>
-              <p id="FLR-value">4</p>
-              <p id="DMG-value">0%</p>
-            </div>
-          </div>
-          
-          <div id="radar"><div class="radar-background"></div></div>
-          <img id="hologram-rocket1" src="./models/F16/AIM-9.png">
-          <img id="hologram-jet" src="./models/F16/F16_hologram_green.png">
-          <img id="hologram-rocket2" src="./models/F16/AIM-9.png">
 
-          <img id="pressure" src="./models/altimeter/pressure.svg" alt="atmosphere pressure">
-          <img id="dial" src="./models/altimeter/dial.svg" alt="altimeter dial">
-          <div id="counter">
-            <div id="thousand"></div>
-            <div id="hundred"></div>
-            <div id="ten"></div>
-            <div id="unit"></div>
-          </div>
-          <img id="arrow" src="./models/altimeter/arrow.svg" alt="altimeter arrow">
+<head>
+  <title>SkyCrawlers</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="css/default.css">
+  <script src="lib/babylon.max.js"></script>
+  <script src="lib/babylon.loaders.min.js"></script>
+  <script src="lib/ammo.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
 
-          <div id="artificial-horizon">
-            <div id="gauge"></div>
-            <img src="./models/F16/artificial-horizon.png" alt="artificial horizon marker">
-          </div>
+<body>
+  <div class="hud">
+    <p id="alert"></p>
+    <span id="selector">> </span>
+    <div class="informations">
+      <div class="label">
+        <p id="GUN-label">GUN</p>
+        <p id="MSL-label">MSL</p>
+        <p id="FLR-label">FLR</p>
+        <p id="DMG-label">DMG</p>
+      </div>
+      <div class="value">
+        <p id="GUN-value">2400</p>
+        <p id="MSL-value">2</p>
+        <p id="FLR-value">4</p>
+        <p id="DMG-value">0%</p>
+      </div>
+    </div>
 
-        </div>
-        
-        <canvas id="myCanvas" width=1600 height=1200></canvas>
-    </body>
+    <div id="radar">
+      <div class="radar-background"></div>
+    </div>
+    <img id="hologram-rocket1" src="./models/F16/AIM-9.png">
+    <img id="hologram-jet" src="./models/F16/F16_hologram_green.png">
+    <img id="hologram-rocket2" src="./models/F16/AIM-9.png">
+
+    <img id="pressure" src="./models/altimeter/pressure.svg" alt="atmosphere pressure">
+    <img id="dial" src="./models/altimeter/dial.svg" alt="altimeter dial">
+    <div id="counter">
+      <div id="thousand"></div>
+      <div id="hundred"></div>
+      <div id="ten"></div>
+      <div id="unit"></div>
+    </div>
+    <img id="arrow" src="./models/altimeter/arrow.svg" alt="altimeter arrow">
+
+    <div id="artificial-horizon">
+      <div id="gauge">
+        <div id="up"></div>
+      </div>
+      <img src="./models/F16/artificial-horizon.png" alt="artificial horizon marker">
+    </div>
+
+  </div>
+
+  <canvas id="myCanvas" width=1600 height=1200></canvas>
+</body>
+
 </html>
