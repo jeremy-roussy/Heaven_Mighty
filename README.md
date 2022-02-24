@@ -27,7 +27,9 @@ Roussy Jeremy
 Dans la version actuelle le joueur controle un avion de chasse de type F16 avec lequel il peut manoeuvrer comme bon lui semble sur une carte avec un relief assez dense. De plus grace à une interface, le joueur peut voir à tout moment le reste de munitions transporté par son avion, ainsi que son état général. Une fonction d'alerte sonnore est implémentée mais n'est pour le moment pas utilisée.
 
 Dans les prochaines versions j'ai pour objectif :
+- compléter le menu des contrôles
 - changer l'écran de chargement
+- permettre à l'utilisateur de recommencer son essaie après un crash
 - ajouter une interface pour permettre à l'utilisateur de changer les paramètres
 - implémenter des graphismes plus réalistes pour le tire avec les rockets
 - implémenter une vue dans le cockpit
