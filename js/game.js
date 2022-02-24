@@ -1,4 +1,5 @@
 import { createJet } from './jet.js';
+import { createEnvironment } from './environment.js';
 
 let canvas;
 let engine;
@@ -28,12 +29,14 @@ function startGame() {
         scene.followCameraJet = createFollowCamera(scene, jet);
         scene.activeCamera = scene.followCameraJet;
 
-        //update position of camera
-        //scene.activeCamera.position = jet.position.TransformCoordinates(jet.frontVector, )
-
-        jet.move();
-        jet.verifyAltitude();
-        jet.messageAlert();
+        if (!scene.inputStates.p) {
+            jet.move();
+            jet.verifyAltitude();
+            jet.messageAlert();
+            document.getElementById("pause").style.opacity = "0";
+        } else {
+            document.getElementById("pause").style.opacity = "1";
+        }
 
         scene.render();
     };
@@ -48,12 +51,9 @@ function createScene() {
 
     scene.assetsManager = configureAssetManager(scene);
 
-    createGround(scene);
-    createSky(scene);
+    createEnvironment(scene);
 
     createJet(scene);
-
-    createLights(scene);
 
     loadSounds(scene);
 
@@ -93,58 +93,6 @@ function configureAssetManager(scene) {
     };
 
     return assetsManager;
-}
-
-function createSky(scene) {
-    let dome = new BABYLON.PhotoDome(
-        "skydome",
-        "./environment/sky2.jpg",
-        {
-            resolution: 64,
-            size: 10000
-        },
-        scene
-    );
-}
-
-function createGround(scene) {
-    const groundOptions = {
-        width: 10000,
-        height: 10000,
-        subdivisions: 250,
-        minHeight: 0,
-        maxHeight: 2500,
-        onReady: onGroundCreated,
-    };
-
-    //scene is optional and defaults to the current scene
-    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap(
-        "ground",
-        "./environment/map2.jpg",
-        groundOptions,
-        scene
-    );
-
-    // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map4.png", {width:10000, height:10000, subdivisions: 1000, minHeight:0, maxHeight: 3000});
-    // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./environment/map3.png", {width:10000, height:10000, subdivisions: 750, minHeight:0, maxHeight: 3000});
-
-    function onGroundCreated() {
-        const groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
-        groundMaterial.diffuseTexture = new BABYLON.Texture("./environment/rock3.jpg");
-        ground.material = groundMaterial;
-
-        // to be taken into account by collision detection
-        ground.checkCollisions = true;
-
-        // for physic engine
-        ground.physicsImpostor = new BABYLON.PhysicsImpostor(
-            ground,
-            BABYLON.PhysicsImpostor.HeightmapImpostor,
-            { mass: 0 },
-            scene
-        );
-    }
-    return ground;
 }
 
 function loadSounds(scene) {
@@ -240,15 +188,6 @@ function createFollowCamera(scene, target) {
     return camera;
 }
 
-function createLights(scene) {
-    // i.e sun light with all light rays parallels, the vector is the direction.
-    let light0 = new BABYLON.DirectionalLight(
-        "dir0",
-        new BABYLON.Vector3(-1, -1, 0),
-        scene
-    );
-}
-
 window.addEventListener("resize", () => {
     engine.resize()
 });
@@ -264,6 +203,7 @@ function modifySettings() {
     scene.inputStates.strafeL = false;
     scene.inputStates.strafeR = false;
     scene.inputStates.f = false;
+    scene.inputStates.p = false;
     scene.inputStates.space = false;
     scene.inputStates.shift = false;
     scene.inputStates.arrowUp = false;
@@ -287,6 +227,8 @@ function modifySettings() {
                 scene.inputStates.strafeR = true;
             } else if (event.code === "KeyF") {
                 scene.inputStates.f = true;
+            } else if (event.code === "KeyP") {
+                scene.inputStates.p = !scene.inputStates.p;
             } else if (event.code === "Space") {
                 scene.inputStates.space = true;
             } else if (event.code === "ShiftLeft") {
@@ -330,4 +272,8 @@ function modifySettings() {
         },
         false
     );
+
+    document.getElementById("resume").onclick = () => {
+        scene.inputStates.p = false;
+    }
 }

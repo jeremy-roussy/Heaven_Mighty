@@ -8,12 +8,20 @@
   <script src="lib/babylon.max.js"></script>
   <script src="lib/babylon.loaders.min.js"></script>
   <script src="lib/ammo.js"></script>
-  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/game.js"></script>
 </head>
 
 <body>
+
   <div class="hud">
+    <div id="pause">
+      <p>PAUSE MENU</p>
+      <button id="resume">Resume</button>
+      <a href="./home.html"><button>Quit</button></a>
+    </div>
+
     <p id="alert"></p>
+    
     <span id="selector">> </span>
     <div class="informations">
       <div class="label">
@@ -33,6 +41,7 @@
     <div id="radar">
       <div class="radar-background"></div>
     </div>
+
     <img id="hologram-rocket1" src="./models/F16/AIM-9.png">
     <img id="hologram-jet" src="./models/F16/F16_hologram_green.png">
     <img id="hologram-rocket2" src="./models/F16/AIM-9.png">

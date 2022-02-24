@@ -47,8 +47,33 @@ p {
     height:100%;
 }
 
+#pause {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 10px;
+    width: 450px;
+    height: 250px;
+    background-color: rgba(23, 23, 23, 0.5);
+    opacity: 0;
+}
+
+#pause p {
+    color: #AAAAAA;
+    font-family: Inconsolata;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+#pause button {
+    color: white;
+}
+
 #alert {
     position: absolute;
+    display: flex;
     align-self: center;
     justify-content: center;
     top: 30%;
@@ -295,6 +320,7 @@ p {
     grid-template-rows: 35% auto 35%;
     grid-template-columns: 5% 90% 5%;
     grid-template-areas: ". . ." ". content ." ". . .";
+    font-family: Inconsolata;
 }
 
 #buttons {
@@ -303,6 +329,7 @@ p {
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+    z-index: 1;
 }
 
 button {
@@ -365,6 +392,23 @@ button:active {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+}
+
+#retour {
+    grid-area: content;
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75px;
+    height: 25px;
+    cursor: pointer;
+    border-bottom: solid 1px white;
+    border-right: solid 1px white;
 }
 
 .keyboard {
@@ -400,7 +444,6 @@ button:active {
     width: 3.3em;
     height: 100%;
     box-sizing: border-box;
-    cursor: pointer;
     -webkit-user-select: none;
     border: 1px solid #444;
     box-shadow: 0 0.2em 0 0.05em #222;

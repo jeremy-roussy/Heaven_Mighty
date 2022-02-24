@@ -1,16 +1,24 @@
-window.onload = init;
+document.getElementById("controls-btn").onclick = () => {
+    hide("buttons");
+    document.getElementById("menu").style.gridTemplateRows = "5% auto 5%";
+    show("controls-screen");
+};
 
-function init() {
-    document.getElementById("controls-screen").style.display = 'none';
+document.getElementById("retour").onclick = () => {
+    hide("controls-screen");
+    document.getElementById("menu").style.gridTemplateRows = "35% auto 35%";
+    show("buttons");
 }
 
-document.getElementById("controls-btn").onclick = function showControls() {
-    console.log("coucou");
-    document.getElementById("buttons").style.display = "none";
-    document.getElementById("menu").style.gridTemplateRows = "5% auto 5%";
-    document.getElementById("controls-screen").style.display = "flex";
+function show(id) {
+  document.getElementById(id).style.opacity = "1";
+  document.getElementById(id).style.zIndex = "1";
+}
 
-};
+function hide(id) {
+  document.getElementById(id).style.opacity = "0";
+  document.getElementById(id).style.zIndex = "0";
+}
 
 function getKey (e) {
     var location = e.location;
@@ -43,7 +51,7 @@ function getKey (e) {
     if (!key) {
       return console.warn('No key for', e.keyCode);
     }
-  
+    
     key.setAttribute('data-pressed', 'on');
   });
   

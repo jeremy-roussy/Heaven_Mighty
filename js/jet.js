@@ -102,12 +102,13 @@ export function createJet(scene) {
                     scene.assets.chaffsFlareAlertSound.play();
 
                     scene.assets.flareSound.setPosition(jet.position);
-                    scene.assets.flareSound.setVolume(0.5);
+                    scene.assets.flareSound.setVolume(0.1);
                     scene.assets.flareSound.play();
 
-                } else if (jet.flareAmmunition === 0) {
-                    changeStatus("FLR");
-                    document.getElementById("FLR-value").innerText = "---";
+                    if (jet.flareAmmunition === 0) {
+                        changeStatus("FLR");
+                        document.getElementById("FLR-value").innerText = "---";
+                    }
                 }
             }
             if (scene.inputStates.shift) {
@@ -145,9 +146,11 @@ export function createJet(scene) {
                         scene.assets.gunSound.setPosition(jet.position);
                         scene.assets.gunSound.setVolume(0.25);
                         scene.assets.gunSound.play();
-                    } else if (jet.gunAmmunition === 0) {
-                        changeStatus("GUN");
-                        document.getElementById("GUN-value").innerText = "---";
+
+                        if (jet.gunAmmunition === 0) {
+                            changeStatus("GUN");
+                            document.getElementById("GUN-value").innerText = "---";
+                        }
                     }
                 } else if (jet.fireMode === "rocket") {
                     if (jet.canFireRockets && jet.rocketAmmunition > 0) {
@@ -166,7 +169,7 @@ export function createJet(scene) {
                         scene.assets.rocketSound.play();
 
                         // create a ray
-                        let origin = jet.position; // position of the jet
+                        let origin = jet.position;
 
                         let direction = new BABYLON.Vector3(
                             jet.frontVector.x,
@@ -185,15 +188,18 @@ export function createJet(scene) {
                         setTimeout(() => {
                             rayHelper.hide(ray);
                         }, 50);
-                    } else if (jet.rocketAmmunition === 0) {
-                        changeStatus("MSL");
-                        document.getElementById("MSL-value").innerText = "---";
+
+                        if (jet.rocketAmmunition === 0) {
+                            changeStatus("MSL");
+                            document.getElementById("MSL-value").innerText = "---";
+                        }
                     }
                 }
             }
         }
 
         jet.verifyAltitude = () => {
+            // update altimeter value
             displayOnAltimeter(jet);
 
             // create a ray that starts from the jet, and goes down vertically
@@ -234,7 +240,7 @@ export function createJet(scene) {
 
                 if (jet.alert === "MISSILE ALERT") {
                     if (jet.canPlayAlert) {
-                        // ok, we fire, let's put the above property to false
+                        // ok, alert is triggered, let's put the above property to false
                         jet.canPlayAlert = false;
 
                         scene.assets.missileAlertSound.setPosition(jet.position);
