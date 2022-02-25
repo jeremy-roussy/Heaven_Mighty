@@ -4,7 +4,6 @@ import { createEnvironment } from './environment.js';
 let canvas;
 let engine;
 let scene;
-let camera;
 
 window.onload = startGame;
 
@@ -33,9 +32,9 @@ function startGame() {
             jet.move();
             jet.verifyAltitude();
             jet.messageAlert();
-            document.getElementById("pause").style.opacity = "0";
+            document.getElementById("pause").style.display = "none";
         } else {
-            document.getElementById("pause").style.opacity = "1";
+            document.getElementById("pause").style.display = "flex";
         }
 
         scene.render();

@@ -286,29 +286,32 @@ export function createJet(scene) {
 }
 
 function displayOnAltimeter(jet) {
-    let digit = jet.position.y.toString().split("");
+    let altitude = Math.round(jet.position.y);
+    let digit = altitude.toString().split("");
 
-    if(jet.position.y < 1000) {
-        document.getElementById("thousand").innerText = 0;
-        document.getElementById("hundred").innerText = digit[0];
-        document.getElementById("ten").innerText = digit[1];
-        document.getElementById("unit").innerText = digit[2];
-    } else if (jet.position.y < 100) {
-        document.getElementById("thousand").innerText = 0;
-        document.getElementById("hundred").innerText = 0;
-        document.getElementById("ten").innerText = digit[0];
-        document.getElementById("unit").innerText = digit[1];
-    } else if (jet.position.y < 10) {
+    if(altitude < 10) {        
         document.getElementById("thousand").innerText = 0;
         document.getElementById("hundred").innerText = 0;
         document.getElementById("ten").innerText = 0;
         document.getElementById("unit").innerText = digit[0];
+    } else if (altitude < 100) {
+        document.getElementById("thousand").innerText = 0;
+        document.getElementById("hundred").innerText = 0;
+        document.getElementById("ten").innerText = digit[0];
+        document.getElementById("unit").innerText = digit[1];
+    } else if (altitude < 1000) {
+        document.getElementById("thousand").innerText = 0;
+        document.getElementById("hundred").innerText = digit[0];
+        document.getElementById("ten").innerText = digit[1];
+        document.getElementById("unit").innerText = digit[2];
     } else {
         document.getElementById("thousand").innerText = digit[0];
         document.getElementById("hundred").innerText = digit[1];
         document.getElementById("ten").innerText = digit[2];
         document.getElementById("unit").innerText = digit[3];
     }
+
+    document.getElementById("arrow").style.transform = "rotate(" + (90 + altitude * 360 / 10000) + "deg)";
 }
 
 function changeStatus(id) {
