@@ -1,8 +1,13 @@
 ﻿# SkyGuardian
 
-## Auteur
+## Contributeur
 
 Roussy Jeremy
+Buffa Michel
+
+## Introduction
+
+Ce projet fut créer dans le cadre de ma troisième année d'école d'ingénieur à l'ESTIA et suivant la formation double diplomante Master MIAGE MBDS, avec l'Université Côte d'Azur.
 
 ## Commande
 
