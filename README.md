@@ -31,6 +31,7 @@ Dans les prochaines versions j'ai pour objectif :
 - changer l'écran de chargement
 - permettre à l'utilisateur de recommencer son essaie après un crash
 - ajouter une interface pour permettre à l'utilisateur de changer les paramètres
+- configurer l'horizon artificiel
 - implémenter des graphismes plus réalistes pour le tire avec les rockets
 - implémenter une vue dans le cockpit
 - ajouter des animations pour les ailerons et les gouvernes
