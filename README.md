@@ -66,7 +66,7 @@
   <li>compléter le menu des contrôles</li>
   <li>changer l'écran de chargement</li>
   <li>permettre à l'utilisateur de recommencer son essaie après un crash</li>
-  <li>ajouter une interface pour permettre à l'utilisateur de changer les paramètres</li>
+  <li>ajouter une interface pour permettre à l'utilisateur de changer les paramètres (écran d'accueil : choix de l'avion et de la map)</li>
   <li>configurer l'horizon artificiel</li>
   <li>implémenter des graphismes plus réalistes pour le tire avec les rockets</li>
   <li>implémenter une vue dans le cockpit</li>
