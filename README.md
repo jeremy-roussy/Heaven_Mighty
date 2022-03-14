@@ -4,6 +4,7 @@
 
 <p>Roussy Jeremy</p>
 <p>Buffa Michel</p>
+<p>Vinet Louise</p>
 
 <h2>Introduction</h2>
 
