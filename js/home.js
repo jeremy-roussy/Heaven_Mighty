@@ -1,13 +1,15 @@
 document.getElementById("controls-btn").onclick = () => {
-    hide("buttons");
-    document.getElementById("menu").style.gridTemplateRows = "5% auto 5%";
-    show("controls-screen");
+  hide("buttons");
+  hide("title");
+  document.getElementById("menu").style.gridTemplateRows = "5% auto 5%";
+  show("controls-screen");
 };
 
 document.getElementById("retour").onclick = () => {
-    hide("controls-screen");
-    document.getElementById("menu").style.gridTemplateRows = "35% auto 35%";
-    show("buttons");
+  hide("controls-screen");
+  document.getElementById("menu").style.gridTemplateRows = "35% auto 35%";
+  show("buttons");
+  show("title");
 }
 
 function show(id) {
@@ -20,54 +22,54 @@ function hide(id) {
   document.getElementById(id).style.zIndex = "0";
 }
 
-function getKey (e) {
-    var location = e.location;
-    var selector;
-    if (location === KeyboardEvent.DOM_KEY_LOCATION_RIGHT) {
-      selector = ['[data-key="' + e.keyCode + '-R"]']
-    } else {
-      var code = e.keyCode || e.which;
-      selector = [
-        '[data-key="' + code + '"]',
-        '[data-char*="' + encodeURIComponent(String.fromCharCode(code)) + '"]'
-      ].join(',');
-    }
-    return document.querySelector(selector);
+function getKey(e) {
+  var location = e.location;
+  var selector;
+  if (location === KeyboardEvent.DOM_KEY_LOCATION_RIGHT) {
+    selector = ['[data-key="' + e.keyCode + '-R"]']
+  } else {
+    var code = e.keyCode || e.which;
+    selector = [
+      '[data-key="' + code + '"]',
+      '[data-char*="' + encodeURIComponent(String.fromCharCode(code)) + '"]'
+    ].join(',');
   }
-  
-  function pressKey (char) {
-    var key = document.querySelector('[data-char*="' + char.toUpperCase() + '"]');
-    if (!key) {
-      return console.warn('No key for', char);
-    }
-    key.setAttribute('data-pressed', 'on');
-    setTimeout(function () {
-      key.removeAttribute('data-pressed');
-    }, 200);
+  return document.querySelector(selector);
+}
+
+function pressKey(char) {
+  var key = document.querySelector('[data-char*="' + char.toUpperCase() + '"]');
+  if (!key) {
+    return console.warn('No key for', char);
   }
-  
-  document.body.addEventListener('keydown', function (e) {
-    var key = getKey(e);
-    if (!key) {
-      return console.warn('No key for', e.keyCode);
-    }
-    
-    key.setAttribute('data-pressed', 'on');
-  });
-  
-  document.body.addEventListener('keyup', function (e) {
-    var key = getKey(e);
-    key && key.removeAttribute('data-pressed');
-  });
-  
-  function size () {
-    var size = keyboard.parentNode.clientWidth / 90;
-    keyboard.style.fontSize = size + 'px';
-    console.log(size);
+  key.setAttribute('data-pressed', 'on');
+  setTimeout(function () {
+    key.removeAttribute('data-pressed');
+  }, 200);
+}
+
+document.body.addEventListener('keydown', function (e) {
+  var key = getKey(e);
+  if (!key) {
+    return console.warn('No key for', e.keyCode);
   }
-  
-  var keyboard = document.querySelector('.keyboard');
-  window.addEventListener('resize', function (e) {
-    size();
-  });
+
+  key.setAttribute('data-pressed', 'on');
+});
+
+document.body.addEventListener('keyup', function (e) {
+  var key = getKey(e);
+  key && key.removeAttribute('data-pressed');
+});
+
+function size() {
+  var size = keyboard.parentNode.clientWidth / 90;
+  keyboard.style.fontSize = size + 'px';
+  console.log(size);
+}
+
+var keyboard = document.querySelector('.keyboard');
+window.addEventListener('resize', function (e) {
   size();
+});
+size();

@@ -2,7 +2,7 @@
 <html lang="fr">
 
 <head>
-  <title>SkyGuardian</title>
+  <title>Heaven Mighty</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="css/default.css">
   <script src="lib/babylon.max.js"></script>
@@ -15,9 +15,85 @@
 
   <div class="hud">
     <div id="pause">
-      <p>PAUSE MENU</p>
-      <button id="resume">Resume</button>
-      <a href="./home.html"><button>Quit</button></a>
+      <div id="choices">
+        <p>PAUSE MENU</p>
+        <button id="resume-btn">Resume</button>
+        <button id="settings-btn">Settings</button>
+        <a href="./home.html"><button>Quit</button></a>
+      </div>
+      <div id="settings">
+        <div id="retour">Retour</div>
+        <p>SETTINGS</p>
+        <div class="slider">
+          <p class="title">MUSIC :</p>
+          <input type="range" min="0" max="100" value="50" class="slide" id="music-slide">
+          <p class="slide-value" id="music-slide-value">50 %</p>
+        </div>
+        <div class="slider">
+          <p class="title">EFFECT :</p>
+          <input type="range" min="0" max="100" value="50" class="slide" id="effects-slide">
+          <p class="slide-value" id="effects-slide-value">50 %</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="latitude">
+      <div id="cardinal">
+        <span>|</span>
+        <span class="letter">S</span>
+        <span>|</span>
+        <span>|</span>
+        <span class="letter">E</span>
+        <span>|</span>
+        <span>|</span>
+        <span class="letter">N</span>
+        <span>|</span>
+        <span>|</span>
+        <span class="letter">W</span>
+        <span>|</span>
+        <span>|</span>
+        <span class="letter">S</span>
+        <span>|</span>
+        <span>|</span>
+        <span class="letter">E</span>
+        <span>|</span>
+        <span>|</span>
+        <span class="letter">N</span>
+        <span>|</span>
+        <span>|</span>
+        <span class="letter">W</span>
+        <span>|</span>
+      </div>
+
+      <div id="measures">
+          <span>|</span>
+          <span class="double">|</span>
+          <span>|</span>
+          <span>|</span>
+          <span class="double">|</span>
+          <span>|</span>
+          <span>|</span>
+          <span class="double">|</span>
+          <span>|</span>
+          <span>|</span>
+          <span class="double">|</span>
+          <span>|</span>
+          <span>|</span>
+          <span class="double">|</span>
+          <span>|</span>
+          <span>|</span>
+          <span class="double">|</span>
+          <span>|</span>
+          <span>|</span>
+          <span class="double">|</span>
+          <span>|</span>
+          <span>|</span>
+          <span class="double">|</span>
+          <span>|</span>
+      </div>
+      
+      <div id="direction"></div>
+      <span id="witness">|</span>
     </div>
 
     <p id="alert"></p>
@@ -42,25 +118,25 @@
       <div class="radar-background"></div>
     </div>
 
-    <img id="hologram-rocket1" src="./models/F16/AIM-9.png">
-    <img id="hologram-jet" src="./models/F16/F16_hologram_green.png">
-    <img id="hologram-rocket2" src="./models/F16/AIM-9.png">
+    <img id="hologram-rocket1" src="./assets/models/F16/AIM-9.png">
+    <img id="hologram-jet" src="./assets/models/F16/F16_hologram_green.png">
+    <img id="hologram-rocket2" src="./assets/models/F16/AIM-9.png">
 
-    <img id="pressure" src="./models/altimeter/pressure.svg" alt="atmosphere pressure">
-    <img id="dial" src="./models/altimeter/dial.svg" alt="altimeter dial">
+    <img id="pressure" src="./assets/models/altimeter/pressure.svg" alt="atmosphere pressure">
+    <img id="dial" src="./assets/models/altimeter/dial.svg" alt="altimeter dial">
     <div id="counter">
       <div id="thousand"></div>
       <div id="hundred"></div>
       <div id="ten"></div>
       <div id="unit"></div>
     </div>
-    <img id="arrow" src="./models/altimeter/arrow.svg" alt="altimeter arrow">
+    <img id="arrow" src="./assets/models/altimeter/arrow.svg" alt="altimeter arrow">
 
     <div id="artificial-horizon">
       <div id="gauge">
         <div id="up"></div>
       </div>
-      <img src="./models/F16/artificial-horizon.png" alt="artificial horizon marker">
+      <img src="./assets/models/F16/artificial-horizon.png" alt="artificial horizon marker">
     </div>
 
   </div>

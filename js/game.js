@@ -31,6 +31,7 @@ function startGame() {
         if (!scene.inputStates.p) {
             jet.move();
             jet.verifyAltitude();
+            jet.verifyLatitude();
             jet.messageAlert();
             document.getElementById("pause").style.display = "none";
         } else {
@@ -47,6 +48,9 @@ function startGame() {
 
 function createScene() {
     let scene = new BABYLON.Scene(engine);
+
+    scene.musicVolume = 0.5;
+    scene.effectsVolume = 0.5;
 
     scene.assetsManager = configureAssetManager(scene);
 
@@ -97,49 +101,49 @@ function configureAssetManager(scene) {
 function loadSounds(scene) {
     var assetsManager = scene.assetsManager;
 
-    var binaryTask = assetsManager.addBinaryFileTask("gunSound", "sounds/bullet.mp3");
+    var binaryTask = assetsManager.addBinaryFileTask("gunSound", "./assets/sounds/bullet.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.gunSound = new BABYLON.Sound("gun", task.data, scene, null, {
             loop: false,
         });
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("rocketSound", "sounds/rocket.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("rocketSound", "./assets/sounds/rocket.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.rocketSound = new BABYLON.Sound("rocket", task.data, scene, null, {
             loop: false,
         });
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("flareSound", "sounds/multipleFlare.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("flareSound", "./assets/sounds/multipleFlare.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.flareSound = new BABYLON.Sound("flare", task.data, scene, null, {
             loop: false,
         });
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("missileAlertSound", "sounds/missile-alert.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("missileAlertSound", "./assets/sounds/missile-alert.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.missileAlertSound = new BABYLON.Sound("missileAlert", task.data, scene, null, {
             loop: false,
         });
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("pullUpAlertSound", "sounds/VWS/pull-up.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("pullUpAlertSound", "./assets/sounds/VWS/pull-up.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.pullUpAlertSound = new BABYLON.Sound("pullUpAlert", task.data, scene, null, {
             loop: false,
         });
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("chaffsFlareAlertSound", "sounds/VWS/chaffs-flare.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("chaffsFlareAlertSound", "./assets/sounds/VWS/chaffs-flare.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.chaffsFlareAlertSound = new BABYLON.Sound("chaffsFlareAlert", task.data, scene, null, {
             loop: false,
         });
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("skyCrawlers", "./sounds/friendly-duel.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("skyCrawlers", "./assets/sounds/friendly-duel.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.skyCrawlersMusic = new BABYLON.Sound(
             "skyCrawlers",
@@ -150,10 +154,10 @@ function loadSounds(scene) {
                 loop: true,
                 autoplay: true,
             }
-        ).setVolume(0.25); // set to 0.25 if you want to play
+        ).setVolume(0.25);
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("explosion", "sounds/explosion.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("explosion", "./assets/sounds/explosion.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.explosion = new BABYLON.Sound(
             "explosion",
@@ -272,7 +276,31 @@ function modifySettings() {
         false
     );
 
-    document.getElementById("resume").onclick = () => {
+    document.getElementById("resume-btn").addEventListener("click", (event) => {
         scene.inputStates.p = false;
-    }
+    });
+
+    document.getElementById("settings-btn").addEventListener("click", (event) => {
+        document.getElementById("choices").style.display = "none";
+        document.getElementById("settings").style.display = "flex";
+    });
+
+    document.getElementById("retour").addEventListener("click", (event) => {
+        document.getElementById("settings").style.display = "none";
+        document.getElementById("choices").style.display = "flex";
+    });
+
+    document.getElementById("effects-slide").oninput = () => {
+        let effects_volume = document.getElementById("effects-slide").value;
+        document.getElementById("effects-slide-value").innerText = effects_volume + " %";
+
+        scene.effectsVolume = effects_volume / 100;
+    };
+
+    document.getElementById("music-slide").oninput = () => {
+        let music_volume = document.getElementById("music-slide").value;
+        document.getElementById("music-slide-value").innerText = music_volume + " %";
+
+        scene.musicVolume = music_volume / 100;
+    };
 }

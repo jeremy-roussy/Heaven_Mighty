@@ -1,0 +1,416 @@
+.hud{
+    position:absolute;
+    display: grid;
+    grid-template-rows: auto 250px auto;
+    grid-template-columns: auto 450px auto;
+    grid-template-areas: ". latitude ." ". content ." ". . .";
+    justify-content: center;
+    width:100%;
+    height:100%;
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------- RADAR ------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+
+#radar {
+    position: absolute;
+    left: 25px;
+    bottom: 25px;
+    background: -webkit-radial-gradient(center, rgba(32, 255, 77, 0.3) 0%, rgba(32, 255, 77, 0) 75%), -webkit-repeating-radial-gradient(rgba(32, 255, 77, 0) 5.8%, rgba(32, 255, 77, 0) 18%, rgba(32, 255, 77, 1) 18.6%, rgba(32, 255, 77, 0) 18.9%), -webkit-linear-gradient(90deg, rgba(32, 255, 77, 0) 49.5%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 0) 50.2%), -webkit-linear-gradient(0deg, rgba(32, 255, 77, 0) 49.5%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 0) 50.2%);
+    background: radial-gradient(center, rgba(32, 255, 77, 0.3) 0%, rgba(32, 255, 77, 0) 75%), repeating-radial-gradient(rgba(32, 255, 77, 0) 5.8%, rgba(32, 255, 77, 0) 18%, rgba(32, 255, 77, 1) 18.6%, rgba(32, 255, 77, 0) 18.9%), linear-gradient(90deg, rgba(32, 255, 77, 0) 49.5%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 0) 50.2%), linear-gradient(0deg, rgba(32, 255, 77, 0) 49.5%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 1) 50%, rgba(32, 255, 77, 0) 50.2%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 0.2rem solid #20ff4d;
+    overflow: hidden;
+}
+
+#radar:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    animation: blips 5s infinite;
+    animation-timing-function: linear;
+    animation-delay: 1.4s;
+}
+
+#radar:after {
+    content: ' ';
+    display: block;
+    background-image: linear-gradient(44deg, rgba(0, 255, 51, 0) 50%, rgba(0, 255, 51, 1) 100%);
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: radar-beam 5s infinite;
+    animation-timing-function: linear;
+    transform-origin: bottom right;
+    border-radius: 100% 0 0 0;
+}
+
+#radar-background {
+    background-image: linear-gradient(0deg, transparent 24%, rgba(32, 255, 77, 0.15) 25%, rgba(32, 255, 77, 0.15) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, 0.15) 75%, rgba(32, 255, 77, 0.15) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(32, 255, 77, 0.15) 25%, rgba(32, 255, 77, 0.15) 26%, transparent 27%, transparent 74%, rgba(32, 255, 77, 0.15) 75%, rgba(32, 255, 77, 0.15) 76%, transparent 77%, transparent);
+    background-size: 7rem 7rem;
+    background-position: -5.2rem -5.2rem;
+    background-color: rgba(127, 127, 127, 0.25);
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+@keyframes radar-beam {
+    0% {
+        transform: rotate(0deg);
+   }
+    100% {
+        transform: rotate(360deg);
+   }
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------- ALTIMETER ----------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+
+#dial {
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    transform: translate(0%, 0%);
+    text-align: center;
+    width: 260px;
+}
+
+#pressure {
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    transform: translate(0%, 0%);
+    transform: rotate(20deg); 
+    text-align: center;
+    width: 260px;
+}
+
+#counter {
+    position: absolute;
+    bottom: 145px;
+    right: 92.5px;
+    font-size: 0;
+}
+
+#counter div:first-of-type {
+    border-color: white;
+    border-left-style: solid;
+}
+
+#counter div{
+    display: inline-block;
+    text-align: center;
+    width: 15px;
+    height: 22.5px;
+    color: white;
+    font-size: 20px;
+    font-family: Inconsolata;
+    border-color: white;
+    border-right-style: solid;
+    background-color: #232323;
+}
+
+#arrow {
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    transform: translate(0%, 0%);
+    transform: rotate(90deg); 
+    text-align: center;
+    width: 260px;
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------- ALERT ------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+
+#alert {
+    grid-area: content;
+    justify-self: center;
+    align-self: start;
+    display: flex;
+    justify-content: center;
+    font-family: Inconsolata;
+    font-weight: bolder;
+    outline: 1px solid red;;
+    color: red;
+    text-align: center;
+    width: 150px;
+    animation: blink 750ms linear infinite;
+}
+
+@keyframes blink {
+	0% { opacity: 1; }
+	20% { opacity: .8; }
+	30% { opacity: .6; }
+	40% { opacity: .4; }
+	50% { opacity: .2; }
+	60% { opacity: 0; }
+	70% { opacity: .2; }
+	80% { opacity: .4; }
+	90% { opacity: .6; }
+	98% { opacity: .8; }
+	100% { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------- HOLOGRAM ------------------------------------------------------------------ */
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+
+#hologram-rocket1 {
+    position: absolute;
+    right: 140px;
+    top: 70px;
+    display: block;
+    width: 10px;
+    height: auto;
+}
+
+#hologram-rocket2 {
+    position: absolute;
+    right: 25px;
+    top: 70px;
+    display: block;
+    width: 10px;
+    height: auto;
+}
+
+#hologram-jet {
+    position: absolute;
+    right: 50px;
+    top: 10px;
+    display: block;
+    width: 75px;
+    height: auto;
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------- TEXT INFORMATION -------------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+
+#selector {
+    position: absolute;
+    color: #0f0;
+    text-shadow:0px 0px 1px #0f0;
+    right: 175px;
+    top: 150px;
+    font-family: Orbitron;
+}
+
+.informations {
+    position: absolute;
+    color: #0f0;
+    text-shadow:0px 0px 1px #0f0;
+    right: 10px;
+    top: 150px;
+    width: 150px;
+    font-family: Orbitron;
+}
+
+.label {
+    float: left;
+    width: 50%;
+}
+
+.value {
+    float: right;
+    width: 50%;
+    text-align: right;
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------- ARTIFICIAL HORIZON ------------------------------------------------------------ */
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+
+#artificial-horizon {
+    position: absolute;
+    text-align: center;
+    bottom: 190px;
+    right: 190px;
+    background-color: #232323;
+    width: 125px;
+    height: 125px;
+    border-radius: 125px;
+    border: 5px solid #232323;
+    overflow: hidden;
+}
+
+#gauge {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform: rotate(0deg);
+}
+
+#gauge #up{
+    position: relative;
+    width: 100%;
+    height: 50%;
+
+    background: rgb(255,255,255);
+    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(199,199,199,1) 0%, rgba(98,98,98,1) 100%);
+    border-color: white;
+    border-width: 2.5px;
+    border-bottom-style:solid;
+}
+
+#artificial-horizon img {    
+    position: absolute;
+    width: 112.5px;
+    height: auto;
+    top: 20%;
+    right: 5%;
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------- GAME PAUSE / SETTINGS MENU --------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+
+#pause {
+    grid-area: content;
+    display: none;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    align-self: center;
+    justify-self: center;
+    background-color: rgba(23, 23, 23, 0.5);
+}
+
+#choices {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#choices > p:first-of-type {
+    color: #AAAAAA;
+    font-family: Inconsolata;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+#choices button {
+    color: white;
+}
+
+#settings {
+    align-self: center;
+    display: none;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 10px;
+    width: 450px;
+    height: 250px;
+    background-color: rgba(23, 23, 23, 0.5);
+}
+
+#settings > p:first-of-type {
+    color: #AAAAAA;
+    font-family: Inconsolata;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.slider {
+    width: 85%;
+    display: grid;
+    grid-template-columns: 20%  60% 20%;
+    grid-template-areas: "title slide slide-value" ;
+}
+
+.title {
+    grid-area: "title";
+    color: white;
+    align-self: center;
+    justify-self: left;
+}
+
+.slide {
+    grid-area: "slide";
+}
+
+.slide-value {
+    color: white;
+    grid-area: "slide-value";
+    align-self: center;
+    justify-self: right;
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------- ORIENTATION DIRECTION ----------------------------------------------------------- */
+/* --------------------------------------------------------------------------------------------------------------------------------------------- */
+
+#latitude {
+    grid-area: latitude;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 75px;
+    overflow: hidden;
+    font-family:courier;
+    font-weight:bold;
+    color:#1f1;
+}
+
+#cardinal {
+    position:relative;
+    margin-top: 10%;
+}
+
+#cardinal :not(.letter) {
+    color: transparent;
+}
+
+#cardinal, #measures {
+    width: 200%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    transform: translateX(58px);
+}
+
+#measures {
+    font-size:0.8em;
+}
+
+#direction {
+    position:relative;
+    border-top:2px solid #1f1;
+    width:100%;
+    margin:auto;
+    margin-top: -4px;
+}
+
+#witness {
+    position:relative;
+    margin:auto;
+    margin-top: -6px;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    font-size:1.4em;
+}
+
+.double {
+    font-size:1.5em;
+}

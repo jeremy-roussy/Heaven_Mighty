@@ -2,7 +2,7 @@ import { createBullet } from './bullet.js';
 
 export function createJet(scene) {
 
-    var meshTask = scene.assetsManager.addMeshTask("jet task", "", "./models/F16/", "scene.gltf", scene);
+    var meshTask = scene.assetsManager.addMeshTask("jet task", "", "./assets/models/F16/", "scene.gltf", scene);
 
     meshTask.onSuccess = function (task) {
 
@@ -98,11 +98,11 @@ export function createJet(scene) {
                     }, 1000 * jet.fireFlaresAfter);
 
                     scene.assets.chaffsFlareAlertSound.setPosition(jet.position);
-                    scene.assets.chaffsFlareAlertSound.setVolume(0.25);
+                    scene.assets.chaffsFlareAlertSound.setVolume(0.5 * scene.effectsVolume);
                     scene.assets.chaffsFlareAlertSound.play();
 
                     scene.assets.flareSound.setPosition(jet.position);
-                    scene.assets.flareSound.setVolume(0.1);
+                    scene.assets.flareSound.setVolume(0.2 * scene.effectsVolume);
                     scene.assets.flareSound.play();
 
                     if (jet.flareAmmunition === 0) {
@@ -144,7 +144,7 @@ export function createJet(scene) {
                         }, 1000 * jet.fireAfter);
 
                         scene.assets.gunSound.setPosition(jet.position);
-                        scene.assets.gunSound.setVolume(0.25);
+                        scene.assets.gunSound.setVolume(0.5 * scene.effectsVolume);
                         scene.assets.gunSound.play();
 
                         if (jet.gunAmmunition === 0) {
@@ -165,7 +165,7 @@ export function createJet(scene) {
                         }, 1000 * jet.fireRocketsAfter);
 
                         scene.assets.rocketSound.setPosition(jet.position);
-                        scene.assets.rocketSound.setVolume(0.25);
+                        scene.assets.rocketSound.setVolume(0.5 * scene.effectsVolume);
                         scene.assets.rocketSound.play();
 
                         // create a ray
@@ -244,7 +244,7 @@ export function createJet(scene) {
                         jet.canPlayAlert = false;
 
                         scene.assets.missileAlertSound.setPosition(jet.position);
-                        scene.assets.missileAlertSound.setVolume(0.5);
+                        scene.assets.missileAlertSound.setVolume(scene.effectsVolume);
                         scene.assets.missileAlertSound.play();
 
                         setTimeout(() => {
@@ -258,7 +258,7 @@ export function createJet(scene) {
                         jet.canPlayAlert = false;
 
                         scene.assets.pullUpAlertSound.setPosition(jet.position);
-                        scene.assets.pullUpAlertSound.setVolume(0.25);
+                        scene.assets.pullUpAlertSound.setVolume(0.5 * scene.effectsVolume);
                         scene.assets.pullUpAlertSound.play();
 
                         setTimeout(() => {
@@ -271,11 +271,22 @@ export function createJet(scene) {
             }
         }
 
+        jet.verifyLatitude = () => {
+            let directionDegrees = angleBetweenTwoVectors(jet.frontVector);
+
+            console.log(directionDegrees);
+
+            let latitude = -174 + (116 / 90) * directionDegrees;
+
+            document.getElementById("cardinal").style.transform = "translateX(" + latitude + "px)";
+            document.getElementById("measures").style.transform = "translateX(" + latitude + "px)";
+        }
+
         jet.crash = () => {
             changeStatus("DMG");
             document.getElementById("DMG-value").innerText = "100%";
 
-            document.getElementById("hologram-jet").src = "./models/F16/F16_hologram_red.png";
+            document.getElementById("hologram-jet").src = "./assets/models/F16/F16_hologram_red.png";
 
             scene.assets.explosion.setPosition(jet.position);
             scene.assets.explosion.play();
@@ -322,4 +333,26 @@ function changeStatus(id) {
     document.getElementById(label).style.textShadow = "0px 0px 1px #f00";
     document.getElementById(value).style.color = "#f00";
     document.getElementById(value).style.textShadow = "0px 0px 1px #f00";
+}
+
+function angleBetweenTwoVectors(normal) {
+    let vec = normal;
+
+    vec.y = 0;
+    let normalizedVec = BABYLON.Vector3.Normalize(vec);
+
+    // STEP 3 dot vector of (0 0 -1). (0 0 -1) points to the north in my application
+    let north = new BABYLON.Vector3(0, 0, -1);
+    let dotVec = BABYLON.Vector3.Dot(north, normalizedVec);
+
+    // STEP 4 arccos of dot vector
+    let angleRadians = Math.acos(dotVec);
+    let angleDeegres = angleRadians * 180 / Math.PI
+
+    // To make angle from 0 to 360
+    if (normalizedVec.x < 0) {
+        angleDeegres = 360 - angleDeegres;
+    }
+
+    return angleDeegres.toFixed(2);
 }
