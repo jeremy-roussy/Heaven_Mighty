@@ -1,5 +1,9 @@
 import { createJet } from './jet.js';
+import { rocketStatus } from './rocket.js';
+import { createAIMRocket } from './rocket.js';
+import { createAGMRocket } from './rocket.js';
 import { createEnvironment } from './environment.js';
+import { createCustomLoadingScreen } from './loadingScreen.js';
 
 let canvas;
 let engine;
@@ -11,6 +15,10 @@ function startGame() {
     console.log("startGame");
     canvas = document.querySelector("#myCanvas");
     engine = new BABYLON.Engine(canvas, true, { stencil: true });
+
+    let first = true;
+
+    createCustomLoadingScreen(engine);
 
     scene = createScene();
 
@@ -24,11 +32,30 @@ function startGame() {
 
         let jet = scene.getMeshByName("jet");
 
+        let leftAIMRocket = scene.getMeshByName("leftAIMRocket");
+        let rightAIMRocket = scene.getMeshByName("rightAIMRocket");
+        
+        let leftAGMRocket = scene.getMeshByName("leftAGMRocket");
+        let rightAGMRocket = scene.getMeshByName("rightAGMRocket");
+
+        if(first) {
+            jet.addChild(leftAIMRocket);
+            jet.addChild(rightAIMRocket);
+            jet.addChild(leftAGMRocket);
+            jet.addChild(rightAGMRocket);
+
+            first = false;
+        }
+
         // second parameter is the target to follow
         scene.followCameraJet = createFollowCamera(scene, jet);
         scene.activeCamera = scene.followCameraJet;
 
         if (!scene.inputStates.p) {
+            rocketStatus(scene, leftAIMRocket);
+            rocketStatus(scene, rightAIMRocket);
+            rocketStatus(scene, leftAGMRocket);
+            rocketStatus(scene, rightAGMRocket);
             jet.move();
             jet.verifyAltitude();
             jet.verifyLatitude();
@@ -57,6 +84,12 @@ function createScene() {
     createEnvironment(scene);
 
     createJet(scene);
+
+    createAIMRocket(scene, "leftAIMRocket", new BABYLON.Vector3(0.75, 2500, -4.9));
+    createAIMRocket(scene, "rightAIMRocket", new BABYLON.Vector3(0.75, 2500, 4.9));
+    
+    createAGMRocket(scene, "leftAGMRocket", new BABYLON.Vector3(0.8, 2499.6, -3.05));
+    createAGMRocket(scene, "rightAGMRocket", new BABYLON.Vector3(0.8, 2499.6, 3.05));
 
     loadSounds(scene);
 

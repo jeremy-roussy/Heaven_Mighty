@@ -1,3 +1,4 @@
+import { angleBetweenXaxis } from './math.js';
 import { createBullet } from './bullet.js';
 
 export function createJet(scene) {
@@ -27,7 +28,7 @@ export function createJet(scene) {
         jet.scaling.scaleInPlace(1);
 
         jet.position.y = 2500;
-        jet.speed = 10;
+        jet.speed = 0;
         jet.fireMode = "bullet";
 
         jet.alert = "";
@@ -43,12 +44,12 @@ export function createJet(scene) {
         jet.fireAfter = 0.01; // in seconds
 
         // to avoid firing too many rockets rapidly
-        jet.rocketAmmunition = 2;
+        jet.rocketAmmunition = 4;
         jet.canFireRockets = true;
-        jet.fireRocketsAfter = 2; // in seconds
+        jet.fireRocketsAfter = 1; // in seconds
 
         // to avoid firing too many flares rapidly
-        jet.flareAmmunition = 4;
+        jet.flareAmmunition = 8;
         jet.canFireFlares = true;
         jet.fireFlaresAfter = 1; // in seconds
 
@@ -154,6 +155,22 @@ export function createJet(scene) {
                     }
                 } else if (jet.fireMode === "rocket") {
                     if (jet.canFireRockets && jet.rocketAmmunition > 0) {
+
+                        switch (jet.rocketAmmunition) {
+                            case 4:
+                                jet.removeChild(scene.getMeshByName("leftAIMRocket"));
+                                break;
+                            case 3:
+                                jet.removeChild(scene.getMeshByName("rightAIMRocket"));
+                                break;
+                            case 2:
+                                jet.removeChild(scene.getMeshByName("leftAGMRocket"));
+                                break;
+                            case 1:
+                                jet.removeChild(scene.getMeshByName("rightAGMRocket"));
+                                break;
+                        }
+
                         // ok, we fire, let's put the above property to false
                         jet.canFireRockets = false;
                         jet.rocketAmmunition--;
@@ -168,6 +185,7 @@ export function createJet(scene) {
                         scene.assets.rocketSound.setVolume(0.5 * scene.effectsVolume);
                         scene.assets.rocketSound.play();
 
+                        /*
                         // create a ray
                         let origin = jet.position;
 
@@ -187,7 +205,8 @@ export function createJet(scene) {
                         // to make ray disappear after 50ms
                         setTimeout(() => {
                             rayHelper.hide(ray);
-                        }, 50);
+                        }, 250);
+                        */
 
                         if (jet.rocketAmmunition === 0) {
                             changeStatus("MSL");
@@ -272,9 +291,7 @@ export function createJet(scene) {
         }
 
         jet.verifyLatitude = () => {
-            let directionDegrees = angleBetweenTwoVectors(jet.frontVector);
-
-            console.log(directionDegrees);
+            let directionDegrees = angleBetweenXaxis(jet.frontVector);
 
             let latitude = -174 + (116 / 90) * directionDegrees;
 
@@ -333,26 +350,4 @@ function changeStatus(id) {
     document.getElementById(label).style.textShadow = "0px 0px 1px #f00";
     document.getElementById(value).style.color = "#f00";
     document.getElementById(value).style.textShadow = "0px 0px 1px #f00";
-}
-
-function angleBetweenTwoVectors(normal) {
-    let vec = normal;
-
-    vec.y = 0;
-    let normalizedVec = BABYLON.Vector3.Normalize(vec);
-
-    // STEP 3 dot vector of (0 0 -1). (0 0 -1) points to the north in my application
-    let north = new BABYLON.Vector3(0, 0, -1);
-    let dotVec = BABYLON.Vector3.Dot(north, normalizedVec);
-
-    // STEP 4 arccos of dot vector
-    let angleRadians = Math.acos(dotVec);
-    let angleDeegres = angleRadians * 180 / Math.PI
-
-    // To make angle from 0 to 360
-    if (normalizedVec.x < 0) {
-        angleDeegres = 360 - angleDeegres;
-    }
-
-    return angleDeegres.toFixed(2);
 }
