@@ -95,3 +95,6 @@
 <a href="" title="link to AGM-88 model">AGM-88 (le lien n'existe plus)</a>
 
 <h2>Remerciement</h2>
+
+<p>Je tiens a remercier Louise Vinet, pour avoir consacré du temps à la conception d'un logo et d'un favicon pour mon jeu.</p>
+<img src = "" title = "logo du jeu" alt = "logo du jeu">
