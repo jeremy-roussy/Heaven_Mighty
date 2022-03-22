@@ -44,7 +44,7 @@ export function createJet(scene) {
         jet.fireAfter = 0.01; // in seconds
 
         // to avoid firing too many rockets rapidly
-        jet.rocketAmmunition = 4;
+        jet.rocketAmmunition = 6;
         jet.canFireRockets = true;
         jet.fireRocketsAfter = 1; // in seconds
 
@@ -157,17 +157,23 @@ export function createJet(scene) {
                     if (jet.canFireRockets && jet.rocketAmmunition > 0) {
 
                         switch (jet.rocketAmmunition) {
+                            case 6:
+                                jet.removeChild(scene.getMeshByName("leftAIM_120"));
+                                break;
+                            case 5:
+                                jet.removeChild(scene.getMeshByName("rightAIM_120"));
+                                break;
                             case 4:
-                                jet.removeChild(scene.getMeshByName("leftAIMRocket"));
+                                jet.removeChild(scene.getMeshByName("leftAIM_9"));
                                 break;
                             case 3:
-                                jet.removeChild(scene.getMeshByName("rightAIMRocket"));
+                                jet.removeChild(scene.getMeshByName("rightAIM_9"));
                                 break;
                             case 2:
-                                jet.removeChild(scene.getMeshByName("leftAGMRocket"));
+                                jet.removeChild(scene.getMeshByName("leftAGM"));
                                 break;
                             case 1:
-                                jet.removeChild(scene.getMeshByName("rightAGMRocket"));
+                                jet.removeChild(scene.getMeshByName("rightAGM"));
                                 break;
                         }
 

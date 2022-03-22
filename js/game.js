@@ -1,7 +1,8 @@
 import { createJet } from './jet.js';
-import { rocketStatus } from './rocket.js';
-import { createAIMRocket } from './rocket.js';
-import { createAGMRocket } from './rocket.js';
+import { missileStatus } from './missile.js';
+import { createAIM_120 } from './missile.js';
+import { createAIM_9 } from './missile.js';
+import { createAGM } from './missile.js';
 import { createEnvironment } from './environment.js';
 import { createCustomLoadingScreen } from './loadingScreen.js';
 
@@ -28,21 +29,26 @@ function startGame() {
 
     // main animation loop 60 times/s
     scene.toRender = () => {
-        let deltaTime = engine.getDeltaTime();
+        document.getElementById("fps").innerHTML = engine.getFps().toFixed() + " fps";
 
         let jet = scene.getMeshByName("jet");
 
-        let leftAIMRocket = scene.getMeshByName("leftAIMRocket");
-        let rightAIMRocket = scene.getMeshByName("rightAIMRocket");
+        let leftAIM_120 = scene.getMeshByName("leftAIM_120");
+        let rightAIM_120 = scene.getMeshByName("rightAIM_120");
+
+        let leftAIM_9 = scene.getMeshByName("leftAIM_9");
+        let rightAIM_9 = scene.getMeshByName("rightAIM_9");
         
-        let leftAGMRocket = scene.getMeshByName("leftAGMRocket");
-        let rightAGMRocket = scene.getMeshByName("rightAGMRocket");
+        let leftAGM = scene.getMeshByName("leftAGM");
+        let rightAGM = scene.getMeshByName("rightAGM");
 
         if(first) {
-            jet.addChild(leftAIMRocket);
-            jet.addChild(rightAIMRocket);
-            jet.addChild(leftAGMRocket);
-            jet.addChild(rightAGMRocket);
+            jet.addChild(leftAIM_120);
+            jet.addChild(rightAIM_120);
+            jet.addChild(leftAIM_9);
+            jet.addChild(rightAIM_9);
+            jet.addChild(leftAGM);
+            jet.addChild(rightAGM);
 
             first = false;
         }
@@ -52,10 +58,12 @@ function startGame() {
         scene.activeCamera = scene.followCameraJet;
 
         if (!scene.inputStates.p) {
-            rocketStatus(scene, leftAIMRocket);
-            rocketStatus(scene, rightAIMRocket);
-            rocketStatus(scene, leftAGMRocket);
-            rocketStatus(scene, rightAGMRocket);
+            missileStatus(scene, leftAIM_120);
+            missileStatus(scene, rightAIM_120);
+            missileStatus(scene, leftAIM_9);
+            missileStatus(scene, rightAIM_9);
+            missileStatus(scene, leftAGM);
+            missileStatus(scene, rightAGM);
             jet.move();
             jet.verifyAltitude();
             jet.verifyLatitude();
@@ -85,11 +93,14 @@ function createScene() {
 
     createJet(scene);
 
-    createAIMRocket(scene, "leftAIMRocket", new BABYLON.Vector3(0.75, 2500, -4.9));
-    createAIMRocket(scene, "rightAIMRocket", new BABYLON.Vector3(0.75, 2500, 4.9));
+    createAIM_120(scene, "leftAIM_120", new BABYLON.Vector3(0.75, 2500, -4.87));
+    createAIM_120(scene, "rightAIM_120", new BABYLON.Vector3(0.75, 2500, 4.87));
+
+    createAIM_9(scene, "leftAIM_9", new BABYLON.Vector3(0.8, 2499.65, -4));
+    createAIM_9(scene, "rightAIM_9", new BABYLON.Vector3(0.8, 2499.65, 4));
     
-    createAGMRocket(scene, "leftAGMRocket", new BABYLON.Vector3(0.8, 2499.6, -3.05));
-    createAGMRocket(scene, "rightAGMRocket", new BABYLON.Vector3(0.8, 2499.6, 3.05));
+    createAGM(scene, "leftAGM", new BABYLON.Vector3(0.6, 2499.6, -3.05));
+    createAGM(scene, "rightAGM", new BABYLON.Vector3(0.6, 2499.6, 3.05));
 
     loadSounds(scene);
 

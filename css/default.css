@@ -54,11 +54,11 @@ p {
 
 #title {
     grid-area: title;
-    font-family: Quantum;
     color: white;
+    width: auto;
+    height: 200%;
     align-self: center;
     justify-self: center;
-    font-size: 4em;
 }
 
 #buttons {
