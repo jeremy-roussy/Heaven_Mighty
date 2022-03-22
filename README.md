@@ -1,4 +1,4 @@
-<h1>Heaven Mighty</h1>
+<img src = "https://github.com/jeremy-roussy/Heaven_Mighty/blob/main/assets/images/title.svg" title = "logo du jeu" alt = "logo du jeu">
 
 <h2>Contributeur</h2>
 
@@ -97,5 +97,3 @@
 <h2>Remerciement</h2>
 
 <p>Je tiens a remercier Louise Vinet, pour avoir consacré du temps à la conception d'un logo et d'un favicon pour mon jeu.</p>
-<img src = "https://github.com/jeremy-roussy/Heaven_Mighty/blob/main/assets/images/title.svg" title = "logo du jeu" alt = "logo du jeu">
-<img src = "https://github.com/jeremy-roussy/Heaven_Mighty/blob/main/assets/images/favicon.svg" title = "favicon du jeu" alt = "favicon du jeu">
