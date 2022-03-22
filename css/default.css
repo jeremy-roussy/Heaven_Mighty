@@ -56,7 +56,7 @@ p {
     grid-area: title;
     color: white;
     width: auto;
-    height: 200%;
+    height: 75%;
     align-self: center;
     justify-self: center;
 }
