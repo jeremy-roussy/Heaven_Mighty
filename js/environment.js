@@ -1,7 +1,8 @@
 export function createEnvironment(scene) {
     createGround(scene);
-    createSky(scene);
-    createLights(scene);
+    //createSky(scene);
+    scene.createDefaultLight();
+    //createDynamicTerrain(scene);
 }
 
 function createSky(scene) {
@@ -17,50 +18,68 @@ function createSky(scene) {
 }
 
 function createGround(scene) {
-    const groundOptions = {
-        width: 10000,
-        height: 10000,
-        subdivisions: 250,
-        minHeight: 0,
-        maxHeight: 2500,
-        onReady: onGroundCreated
-    };
 
-    //scene is optional and defaults to the current scene
-    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap(
-        "ground",
-        "./assets/environment/map.jpg",               // you can choose map2.jpg
-        groundOptions,
-        scene
-    );
+    var meshTask = scene.assetsManager.addMeshTask("ground task", "", "./assets/environment/", "ground.babylon", scene);
+    
+    meshTask.onSuccess = function (task) {
 
-    // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./assets/environment/map4.png", {width:10000, height:10000, subdivisions: 1000, minHeight:0, maxHeight: 3000});
-    // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap("largeGround", "./assets/environment/map3.png", {width:10000, height:10000, subdivisions: 750, minHeight:0, maxHeight: 3000});
+        onGroundImported(task.loadedMeshes,
+            task.loadedParticleSystems,
+            task.loadedSkeletons);
+    }
 
-    function onGroundCreated() {
-        const groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
-        groundMaterial.diffuseTexture = new BABYLON.Texture("./assets/environment/rock3.jpg");
-        ground.material = groundMaterial;
+    meshTask.onerror = function () {
+        console.log("ERRORRRR");
+    }
 
+    function onGroundImported(meshes, particles, skeletons) {
+        let ground = meshes[0];
+        let scale = 50
+
+        ground.name = "ground";
+        ground.scaling.scaleInPlace(scale);
+
+        ground.position = new BABYLON.Vector3(0, scale * 30, 0);
+        
         // to be taken into account by collision detection
         ground.checkCollisions = true;
 
         // for physic engine
         ground.physicsImpostor = new BABYLON.PhysicsImpostor(
             ground,
-            BABYLON.PhysicsImpostor.HeightmapImpostor,
+            BABYLON.PhysicsImpostor.MeshImpostor,
             { mass: 0 },
             scene
         );
+        
+        return ground;
     }
-    return ground;
 }
 
-function createLights(scene) {
-    // i.e sun light with all light rays parallels, the vector is the direction.
-    let light0 = new BABYLON.DirectionalLight(
-        "dir0",
-        new BABYLON.Vector3(-1, -1, 0),
-        scene
-    );
+function createDynamicTerrain(scene) {
+    // Declare a callback function that will be executed once the heightmap file is downloaded
+    // This function is passed the generated data and the number of points on the map height and width
+    var terrain;
+    var createTerrain = function (mapData, mapSubX, mapSubZ) {
+        var options = {
+            terrainSub: 100,  // 100 x 100 quads
+            mapData: mapData, // the generated data received
+            mapSubX: mapSubX, mapSubZ: mapSubZ // the map number of points per dimension
+        };
+        terrain = new BABYLON.DynamicTerrain("dt", options, scene);
+        terrain.createUVMap();      // compute also the UVs
+        terrain.mesh.material = someMaterial;
+        // etc about the terrain ...
+        // terrain.updateCameraLOD = function(camera) { ... }
+    };
+
+    // Create the map from the height map and call the callback function when done
+    var hmURL = "https://www.babylonjs.com/assets/heightMap.png";  // heightmap file URL
+    var hmOptions = {
+        width: 5000, height: 4000,          // map size in the World 
+        subX: 1000, subZ: 800,              // number of points on map width and height
+        onReady: createTerrain              // callback function declaration
+    };
+    var mapData = new Float32Array(1000 * 800 * 3); // the array that will store the generated data
+    BABYLON.DynamicTerrain.CreateMapFromHeightMapToRef(hmURL, hmOptions, mapData, scene);
 }

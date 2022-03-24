@@ -2,7 +2,7 @@ export function createBullet(scene, jet) {
     // Create a bullet
     let bullet = BABYLON.MeshBuilder.CreateSphere(
         "bullet",
-        { diameter: 0.25 },
+        { diameter: 0.1 },
         scene
     );
 
@@ -10,11 +10,7 @@ export function createBullet(scene, jet) {
     bullet.material.emissiveColor = new BABYLON.Color3(0.8,0.8,0.4);
     
     // position the bullet
-    let pos = jet.position;
-    bullet.position = new BABYLON.Vector3(pos.x, pos.y, pos.z);
-
-    // move bullet position from center of the jet to above a bit further than the frontVector end (5 meter s further)
-    bullet.position.addInPlace(jet.frontVector.multiplyByFloats(9, 9, 9));
+    bullet.position = new BABYLON.Vector3(jet.position.x, jet.position.y, jet.position.z);
 
     // add physics to the bullet, mass must be non null to see gravity apply
     bullet.physicsImpostor = new BABYLON.PhysicsImpostor(
@@ -37,7 +33,7 @@ export function createBullet(scene, jet) {
 
     bullet.actionManager = new BABYLON.ActionManager(scene);
 
-    // Make the cannonball disappear after 3s
+    // Make the cannonball disappear after 0.5s
     setTimeout(() => {
         bullet.dispose();
       }, 500);

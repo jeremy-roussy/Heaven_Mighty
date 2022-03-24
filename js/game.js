@@ -1,8 +1,7 @@
 import { createJet } from './jet.js';
+import { createFuelTank } from './fuelTank.js';
+import { createMissile } from './missile.js';
 import { missileStatus } from './missile.js';
-import { createAIM_120 } from './missile.js';
-import { createAIM_9 } from './missile.js';
-import { createAGM } from './missile.js';
 import { createEnvironment } from './environment.js';
 import { createCustomLoadingScreen } from './loadingScreen.js';
 
@@ -13,7 +12,6 @@ let scene;
 window.onload = startGame;
 
 function startGame() {
-    console.log("startGame");
     canvas = document.querySelector("#myCanvas");
     engine = new BABYLON.Engine(canvas, true, { stencil: true });
 
@@ -22,7 +20,6 @@ function startGame() {
     createCustomLoadingScreen(engine);
 
     scene = createScene();
-
     scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.AmmoJSPlugin());
 
     modifySettings();
@@ -39,16 +36,21 @@ function startGame() {
         let leftAIM_9 = scene.getMeshByName("leftAIM_9");
         let rightAIM_9 = scene.getMeshByName("rightAIM_9");
         
-        let leftAGM = scene.getMeshByName("leftAGM");
-        let rightAGM = scene.getMeshByName("rightAGM");
+        let leftAGM_88 = scene.getMeshByName("leftAGM_88");
+        let rightAGM_88 = scene.getMeshByName("rightAGM_88");
+
+        let leftFuelTank = scene.getMeshByName("leftFuelTank");
+        let rightFuelTank = scene.getMeshByName("rightFuelTank");
 
         if(first) {
             jet.addChild(leftAIM_120);
             jet.addChild(rightAIM_120);
             jet.addChild(leftAIM_9);
             jet.addChild(rightAIM_9);
-            jet.addChild(leftAGM);
-            jet.addChild(rightAGM);
+            jet.addChild(leftAGM_88);
+            jet.addChild(rightAGM_88);
+            jet.addChild(leftFuelTank);
+            jet.addChild(rightFuelTank);
 
             first = false;
         }
@@ -62,8 +64,8 @@ function startGame() {
             missileStatus(scene, rightAIM_120);
             missileStatus(scene, leftAIM_9);
             missileStatus(scene, rightAIM_9);
-            missileStatus(scene, leftAGM);
-            missileStatus(scene, rightAGM);
+            missileStatus(scene, leftAGM_88);
+            missileStatus(scene, rightAGM_88);
             jet.move();
             jet.verifyAltitude();
             jet.verifyLatitude();
@@ -93,14 +95,17 @@ function createScene() {
 
     createJet(scene);
 
-    createAIM_120(scene, "leftAIM_120", new BABYLON.Vector3(0.75, 2500, -4.87));
-    createAIM_120(scene, "rightAIM_120", new BABYLON.Vector3(0.75, 2500, 4.87));
+    createMissile(scene, "AIM_120", "left", new BABYLON.Vector3(0.75, 1500, -4.87));
+    createMissile(scene, "AIM_120", "right", new BABYLON.Vector3(0.75, 1500, 4.87));
 
-    createAIM_9(scene, "leftAIM_9", new BABYLON.Vector3(0.8, 2499.65, -4));
-    createAIM_9(scene, "rightAIM_9", new BABYLON.Vector3(0.8, 2499.65, 4));
+    createMissile(scene, "AIM_9", "left", new BABYLON.Vector3(0.8, 1499.65, -4));
+    createMissile(scene, "AIM_9", "right", new BABYLON.Vector3(0.8, 1499.65, 4));
     
-    createAGM(scene, "leftAGM", new BABYLON.Vector3(0.6, 2499.6, -3.05));
-    createAGM(scene, "rightAGM", new BABYLON.Vector3(0.6, 2499.6, 3.05));
+    createMissile(scene, "AGM_88", "left", new BABYLON.Vector3(0.6, 1499.6, -3.05));
+    createMissile(scene, "AGM_88", "right", new BABYLON.Vector3(0.6, 1499.6, 3.05));
+
+    createFuelTank(scene, "leftFuelTank", new BABYLON.Vector3(-0.5, 1499.4, -1.85));
+    createFuelTank(scene, "rightFuelTank", new BABYLON.Vector3(-0.5, 1499.4, 1.85));
 
     loadSounds(scene);
 
@@ -152,9 +157,9 @@ function loadSounds(scene) {
         });
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("rocketSound", "./assets/sounds/rocket.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("missileSound", "./assets/sounds/missile.mp3");
     binaryTask.onSuccess = function (task) {
-        scene.assets.rocketSound = new BABYLON.Sound("rocket", task.data, scene, null, {
+        scene.assets.missileSound = new BABYLON.Sound("missile", task.data, scene, null, {
             loop: false,
         });
     };
@@ -166,7 +171,7 @@ function loadSounds(scene) {
         });
     };
 
-    binaryTask = assetsManager.addBinaryFileTask("missileAlertSound", "./assets/sounds/missile-alert.mp3");
+    binaryTask = assetsManager.addBinaryFileTask("missileAlertSound", "./assets/sounds/missileAlert.mp3");
     binaryTask.onSuccess = function (task) {
         scene.assets.missileAlertSound = new BABYLON.Sound("missileAlert", task.data, scene, null, {
             loop: false,
