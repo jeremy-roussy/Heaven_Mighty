@@ -1,4 +1,7 @@
-<img src = "https://github.com/jeremy-roussy/Heaven_Mighty/blob/main/assets/images/title.svg" title = "logo du jeu" alt = "logo du jeu">
+<p align="center">
+  <img src = "https://github.com/jeremy-roussy/Heaven_Mighty/blob/main/assets/images/title.svg" title = "logo du jeu" alt = "logo du jeu">
+</p>
+<h1></h1>
 
 <h2>Contributeur</h2>
 
@@ -68,12 +71,12 @@
   <li>faire en sorte que la caméra reste derrière l'avion</li>
   <li>changer l'écran de chargement</li>
   <li>permettre à l'utilisateur de recommencer son essaie après un crash</li>
-  <li>ajouter une interface pour permettre à l'utilisateur de changer les paramètres (écran d'accueil : choix de l'avion et de la map)</li>
   <li>configurer l'horizon artificiel</li>
   <li>faire exploser les missiles au contact du sol</li>
   <li>ajouter des particules aux missiles et au leurres</li>
   <li>implémenter une vue dans le cockpit</li>
   <li>ajouter des animations pour les ailerons et les gouvernes</li>
+  <li>ajouter une interface pour permettre à l'utilisateur de changer les paramètres (écran d'accueil : choix de l'avion et de la map)</li>
   <li>ajouter un mode multijoueurs</li>
 </ul>
 
@@ -96,4 +99,4 @@
 
 <h2>Remerciement</h2>
 
-<p>Je tiens a remercier Louise Vinet, pour avoir consacré du temps à la conception d'un logo et d'un favicon pour mon jeu.</p>
+<p>Je tiens a remercier Louise Vinet, pour avoir consacré du temps à la conception d'un logo ainsi qu'un favicon pour mon jeu.</p>
