@@ -97,13 +97,8 @@ export function createJet(scene) {
                     setTimeout(() => {
                         jet.canFireFlares = true;
                     }, 1000 * jet.fireFlaresAfter);
-
-                    scene.assets.chaffsFlareAlertSound.setPosition(jet.position);
-                    scene.assets.chaffsFlareAlertSound.setVolume(0.5 * scene.effectsVolume);
+                    
                     scene.assets.chaffsFlareAlertSound.play();
-
-                    scene.assets.flareSound.setPosition(jet.position);
-                    scene.assets.flareSound.setVolume(0.2 * scene.effectsVolume);
                     scene.assets.flareSound.play();
 
                     // Create a particle system
@@ -200,8 +195,6 @@ export function createJet(scene) {
                             jet.canFire = true;
                         }, 1000 * jet.fireAfter);
 
-                        scene.assets.gunSound.setPosition(jet.position);
-                        scene.assets.gunSound.setVolume(0.5 * scene.effectsVolume);
                         scene.assets.gunSound.play();
 
                         if (jet.gunAmmunition === 0) {
@@ -242,9 +235,7 @@ export function createJet(scene) {
                         setTimeout(() => {
                             jet.canFireMissile = true;
                         }, 1000 * jet.fireMissilesAfter);
-
-                        scene.assets.missileSound.setPosition(jet.position);
-                        scene.assets.missileSound.setVolume(0.5 * scene.effectsVolume);
+                        
                         scene.assets.missileSound.play();
 
                         if (jet.missileAmmunition === 0) {
@@ -301,8 +292,6 @@ export function createJet(scene) {
                         // ok, alert is triggered, let's put the above property to false
                         jet.canPlayAlert = false;
 
-                        scene.assets.missileAlertSound.setPosition(jet.position);
-                        scene.assets.missileAlertSound.setVolume(scene.effectsVolume);
                         scene.assets.missileAlertSound.play();
 
                         setTimeout(() => {
@@ -314,9 +303,7 @@ export function createJet(scene) {
                     if (jet.canPlayAlert) {
                         // ok, we fire, let's put the above property to false
                         jet.canPlayAlert = false;
-
-                        scene.assets.pullUpAlertSound.setPosition(jet.position);
-                        scene.assets.pullUpAlertSound.setVolume(0.5 * scene.effectsVolume);
+                        
                         scene.assets.pullUpAlertSound.play();
 
                         setTimeout(() => {
@@ -339,13 +326,15 @@ export function createJet(scene) {
         }
 
         jet.crash = () => {
+            //scene.assets.explosion.setPosition(jet.position);
+            scene.assets.explosion.play();
+
+            scene.assets.engineSound.stop();
+            
             changeStatus("DMG");
             document.getElementById("DMG-value").innerText = "100%";
 
             document.getElementById("hologram-jet").src = "./assets/models/F16/F16_hologram_red.png";
-
-            scene.assets.explosion.setPosition(jet.position);
-            scene.assets.explosion.play();
 
             jet.dispose();
         }

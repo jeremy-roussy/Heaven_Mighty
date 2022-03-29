@@ -5,7 +5,7 @@ export function createEnvironment(scene) {
     //createDynamicTerrain(scene);
 }
 
-function createSky(scene) {
+function createSky(scene, jet) {
     let dome = new BABYLON.PhotoDome(
         "skydome",
         "./assets/environment/sky2.jpg",

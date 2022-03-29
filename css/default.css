@@ -133,7 +133,7 @@ button:active {
     opacity: 0;
 }
 
-#retour {
+#cancel {
     grid-area: content;
     color: white;
     position: absolute;
