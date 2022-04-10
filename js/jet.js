@@ -102,7 +102,7 @@ export function createJet(scene) {
                     scene.assets.flareSound.play();
 
                     // Create a particle system
-                    var particleSystem = new BABYLON.ParticleSystem("particles", 2000, scene);
+                    var particleSystem = new BABYLON.ParticleSystem("particles", 100, scene);
 
                     //Texture of each particle
                     particleSystem.particleTexture = new BABYLON.Texture("./assets/models/particles/flare.png", scene);

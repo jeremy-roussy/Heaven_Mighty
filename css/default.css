@@ -128,6 +128,7 @@ button:active {
     background-color: rgba(23, 23, 23, 0.75);
     border-radius: 5px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     opacity: 0;
@@ -147,4 +148,42 @@ button:active {
     cursor: pointer;
     border-bottom: solid 1px white;
     border-right: solid 1px white;
+}
+
+#explanations {
+    color: white;
+    width: 100%;
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#turn::before {
+    content: '■ ';
+    color: #EC4E20;
+}
+
+#speed::before {
+    content: '■ ';
+    color: #EC4E20;
+}
+
+#fire::before {
+    content: '■ ';
+    color: #6EEB83;
+}
+
+#change::before {
+    content: '■ ';
+    color: #7C238C;
+}
+
+#activate::before {
+    content: '■ ';
+    color: #FF9505;
+}
+
+#pause-menu::before {
+    content: '■ ';
+    color: #255C99;
 }

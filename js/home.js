@@ -5,7 +5,7 @@ document.getElementById("controls-btn").onclick = () => {
   show("controls-screen");
 };
 
-document.getElementById("retour").onclick = () => {
+document.getElementById("cancel").onclick = () => {
   hide("controls-screen");
   document.getElementById("menu").style.gridTemplateRows = "35% auto 35%";
   show("buttons");
