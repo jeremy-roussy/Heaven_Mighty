@@ -49,6 +49,10 @@
             <td align="center"><img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Aileron_yaw.gif/270px-Aileron_yaw.gif" title = "mouvement de lacet" alt = "mouvement de lacet"></td>
         </tr>
         <tr>
+            <td>↑, ↓</td>
+            <td align="center">Augmenter, réduire la vitesse de l'avion</td>
+        </tr>
+        <tr>
             <td>ESPACE</td>
             <td align="center">Tirer</td>
         </tr>
@@ -59,6 +63,10 @@
         <tr>
             <td>F</td>
             <td align="center">Activer les leurres</td>
+        </tr>
+        <tr>
+            <td>P</td>
+            <td align="center">Mettre le jeu en pause</td>
         </tr>
     </tbody>
 </table>
