@@ -54,12 +54,12 @@ function startGame() {
             jet.addChild(leftFuelTank);
             jet.addChild(rightFuelTank);
 
+            // second parameter is the target to follow
+            scene.followCameraJet = createFollowCamera(scene, jet);
+            scene.activeCamera = scene.followCameraJet;
+
             first = false;
         }
-
-        // second parameter is the target to follow
-        scene.followCameraJet = createFollowCamera(scene, jet);
-        scene.activeCamera = scene.followCameraJet;
 
         soundVolume(scene);
 
@@ -157,14 +157,14 @@ function createFollowCamera(scene, target) {
     // use the target name to name the camera
     let camera = new BABYLON.FollowCamera(
         targetName + "FollowCamera",
-        new BABYLON.Vector3(target.position.x + 25, target.position.y, target.position.z),
+        new BABYLON.Vector3(target.position.x, target.position.y, target.position.z),
         scene,
         target
     );
 
     // default values
     camera.radius = 0; // how far from the object to follow
-    camera.heightOffset = 25; // how high above the object to place the camera
+    camera.heightOffset = 0; // how high above the object to place the camera
     camera.rotationOffset = 0; // the viewing angle
     camera.cameraAcceleration = 0.1; // how fast to move
     camera.maxCameraSpeed = 20; // speed limit
