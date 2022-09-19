@@ -1,4 +1,4 @@
-.hud{
+#hud{
     position:absolute;
     display: grid;
     grid-template-rows: auto 250px auto;

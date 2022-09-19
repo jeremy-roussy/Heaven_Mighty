@@ -1,0 +1,281 @@
+#loadingScreen {
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    background: #0e294e;
+}
+
+#lens {
+    height: 100%;
+    max-height: 350px;
+    max-width: 350px;
+    z-index: 1;
+    left: 50%;
+    position: fixed;
+    top: 50%;
+    width: 100%;
+    transition: all 1s ease-in-out;
+    transform: translate(-50%, -50%);
+}
+
+#lens.active {
+    transform: translate(-50%, -50%);
+}
+
+#lens.loading {
+    transition: all 0.5s ease-in-out;
+    transform: translate(-50%, -50%) scale(0.5);
+}
+
+#lens.loading svg {
+    transform-origin: 50% 50%;
+    animation: lens_spin_counter_clockwise 3s infinite linear;
+}
+
+#lens.loading svg .hatching {
+    opacity: 0;
+    animation: none;
+}
+
+#lens.loading svg .outer-ring {
+    animation: none;
+}
+
+#lens.loading svg .inner-ring, #lens.loading svg .trace {
+    stroke-width: 6 !important;
+}
+
+#lens.loading svg .inner-ring {
+    animation: lens_spin_clockwise 1s infinite linear;
+}
+
+#lens.exploded {
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+    transform: translate(-50%, -50%) scale(2.5);
+}
+
+#lens.exploded svg {
+    transform-origin: 50% 50%;
+}
+
+#lens.hidden:before {
+    opacity: 0;
+}
+
+#lens.hidden svg .hatching, #lens.hidden svg .glow-img, #lens.hidden svg .glow-img-inner, #lens.hidden svg .outer-ring-blue, #lens.hidden svg .outer-ring-red, #lens.hidden svg .inner-ring {
+    animation: none;
+}
+
+#lens:before {
+    content: ' ';
+    top: 50%;
+    left: 50%;
+    height: 1px;
+    position: absolute;
+    width: 1px;
+    transition: all 0.5s ease-in-out;
+    box-shadow: 0 0 1000px 200px rgba(70, 131, 176, 0.3);
+}
+
+#lens svg {
+    opacity: 1;
+    overflow: visible;
+    transform-origin: 50% 50%;
+    transition: all 0.5s ease-in-out;
+}
+
+#lens svg .hatching {
+    opacity: 0.4;
+    fill: #fffff9;
+    enable-background: new;
+    transform-origin: 50% 50%;
+    transform: translate(1px, 0);
+    animation: lens_pulsate 2s infinite ease-in-out;
+}
+
+#lens svg .glow-img {
+    transform-origin: 50% 50%;
+    transform: scale(1.07);
+}
+
+#lens svg .glow-img-inner {
+    transform: scale(0.94);
+}
+
+#lens svg .outer-ring-blue {
+    transform-origin: 50% 50%;
+    transform: translate(1px, 0);
+    animation: lens_spin_clockwise 20s infinite linear;
+}
+
+#lens svg .outer-ring-blue .trace {
+    opacity: 0.5;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.5;
+    enable-background: new;
+}
+
+#lens svg .outer-ring-blue .glow {
+    fill: none;
+    stroke: #11a6fd;
+    stroke-width: 9.5;
+    animation: lens_fade 2s infinite linear;
+}
+
+#lens svg .outer-ring-red {
+    transform-origin: 50% 50%;
+    transform: translate(1px 0);
+    animation: lens_spin_counter_clockwise 10s infinite linear;
+    animation-delay: -1s;
+}
+
+#lens svg .outer-ring-red .trace {
+    opacity: 0.5;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.5;
+    enable-background: new;
+}
+
+#lens svg .outer-ring-red .glow {
+    fill: none;
+    stroke: #e23528;
+    stroke-width: 9.5;
+    transform: translate(1px, 0);
+    animation: lens_flicker 2s infinite linear;
+    animation-delay: -1s;
+}
+
+#lens svg .inner-ring {
+    opacity: 0.5;
+    fill: none;
+    stroke: #fff;
+    enable-background: new;
+    transform-origin: 50% 50%;
+    transform: translate(1px, 0);
+    animation: lens_wind_release 4s infinite ease-out;
+}
+
+#lens.disabled, #lens.hidden {
+    display: block;
+    z-index: -1;
+}
+
+#lens.disabled svg, #lens.hidden svg {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+}
+
+#lens.spin-in svg {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+}
+
+#lens.spin-out svg {
+    opacity: 0;
+    transform: scale(3) rotate(-180deg);
+}
+
+.st0 {
+    opacity: 0.4;
+    fill: #fffff9;
+    enable-background: new;
+}
+
+.st1 {
+    fill: none;
+}
+
+.st2 {
+    opacity: 0.5;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.5;
+    enable-background: new;
+}
+
+.st3 {
+    fill: none;
+    stroke: #11a6fd;
+    stroke-width: 9.5;
+}
+
+.st4 {
+    fill: none;
+    stroke: #e23528;
+    stroke-width: 9.5;
+}
+
+.st5 {
+    opacity: 0.5;
+    fill: none;
+    stroke: #fff;
+    enable-background: new;
+}
+
+/* animations: */
+/* lens animations */
+@keyframes lens_flicker {
+   10% {
+       opacity: 1;
+   }
+   50% {
+       opacity: 0.5;
+   }
+   90% {
+       opacity: 1;
+   }
+   100% {
+       opacity: 0.7;
+   }
+}
+
+@keyframes lens_fade {
+   50% {
+       opacity: 0.5;
+   }
+}
+
+@keyframes lens_pulsate {
+   50% {
+       transform:scale(0.95);
+   }
+}
+
+@keyframes lens_spin_clockwise {
+   0% {
+       transform:rotate(0deg);
+   }
+   100% {
+       bottom: 0;
+       transform:rotate(-360deg);
+   }
+}
+
+@keyframes lens_spin_counter_clockwise {
+   0% {
+       transform:rotate(0deg);
+   }
+   100% {
+       bottom: 0;
+       transform:rotate(360deg);
+   }
+}
+
+@keyframes lens_wind_release {
+   90% {
+       transform:scale(0.8) rotate(210deg);
+   }
+}
+
+@keyframes vanish {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

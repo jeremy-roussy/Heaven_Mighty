@@ -1,3 +1,4 @@
+import { createFreeCamera } from './camera.js';
 import { angleBetweenXaxis } from './math.js';
 import { createBullet } from './bullet.js';
 
@@ -25,6 +26,7 @@ export function createJet(scene) {
         localAxes.zAxis.parent = jet;
 
         jet.name = "jet";
+
         jet.scaling.scaleInPlace(1);
 
         jet.position.y = 1500;
@@ -81,10 +83,16 @@ export function createJet(scene) {
                 jet.rotate(BABYLON.Axis.Y, radian * 5 / 100, BABYLON.Space.LOCAL);
             }
             if (scene.inputStates.arrowUp) {
-                if (jet.speed < 20) jet.speed += 0.25;
+                if (jet.speed < 20) {
+                    jet.speed += 0.25;
+                    scene.followCameraJet.cameraAcceleration += 0.0025;
+                }
             }
             if (scene.inputStates.arrowDown) {
-                if (jet.speed > 0) jet.speed -= 0.25;
+                if (jet.speed > 0) {
+                    jet.speed -= 0.25;
+                    scene.followCameraJet.cameraAcceleration -= 0.0025;
+                }
             }
             if (scene.inputStates.f) {
                 if (jet.canFireFlares && jet.flareAmmunition > 0) {
