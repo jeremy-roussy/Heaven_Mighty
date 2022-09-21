@@ -77,11 +77,10 @@
 <ul>
   <li>compléter le menu des contrôles</li>
   <li>faire en sorte que la caméra reste derrière l'avion</li>
-  <li>changer l'écran de chargement</li>
   <li>permettre à l'utilisateur de recommencer son essaie après un crash</li>
   <li>configurer l'horizon artificiel</li>
   <li>faire exploser les missiles au contact du sol</li>
-  <li>ajouter des particules aux missiles et au leurres</li>
+  <li>changer la physique les particules des leurres</li>
   <li>implémenter une vue dans le cockpit</li>
   <li>ajouter des animations pour les ailerons et les gouvernes</li>
   <li>ajouter une interface pour permettre à l'utilisateur de changer les paramètres (écran d'accueil : choix de l'avion et de la map)</li>
