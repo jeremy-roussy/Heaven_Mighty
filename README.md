@@ -5,8 +5,8 @@
 
 <h2>Contributeur</h2>
 
-<p>Roussy Jeremy</p>
 <p>Buffa Michel</p>
+<p>Roussy Jeremy</p>
 <p>Vinet Louise</p>
 
 <h2>Introduction</h2>
